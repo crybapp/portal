@@ -1,0 +1,19 @@
+{
+    "AllowFileSelectionDialogs": false,
+    "PromptForDownloadLocation": false,
+    "URLBlacklist": [
+        "file://*",
+        "chrome://policy"
+    ],
+    "ExtensionInstallWhitelist": [
+        "aghfnjkcakhmadgdomlmlhhaocbkloab",
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+    ],
+    "ExtensionInstallBlacklist": [
+        "*"
+    ],
+    "ExtensionInstallForcelist": [
+        "aghfnjkcakhmadgdomlmlhhaocbkloab",
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+    ]
+}
