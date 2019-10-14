@@ -1,4 +1,4 @@
-![Cryb OSS](.github/cryb.png "Cryb OSS Logo")
+![Cryb OSS](.github/portal-icon.png "@cryb/portal Logo")
 
 _**Portal** - VM instance_
 
