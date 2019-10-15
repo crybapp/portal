@@ -72,11 +72,7 @@ In this file, you'll need some values. Documentation is available in the `.env-e
 ### Running the app locally
 
 #### Background Services
-Make sure that you have installed MongoDB and Redis, and they are both running locally on port 27017 and 6379 respectively.
-
-The command to start MongoDB is `mongod`, and the command to start Redis is `redis-server`.
-
-If you're developing a feature that requires the VM infrastructure, then make sure `@cryb/aperture` is running.
+Make sure `@cryb/portals` and `@cryb/aperture` are running on port 1337 and 9000 respectively.
 
 #### Starting @cryb/portal
 We recommend that you use a service like [Docker](https://docker.com) to start an instance of `@cryb/portal`.
