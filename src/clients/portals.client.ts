@@ -63,7 +63,6 @@ export default class WRTCClient {
     
     handleMessage = (message: WSEvent) => {
         const { op, d, t } = message
-        console.log(op, d, t)
 
         if(op === 0)
             if(CONTROLLER_EVENT_TYPES.indexOf(t) > -1)

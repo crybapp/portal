@@ -78,6 +78,7 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffm
 
 export const chromium = (env: NodeJS.ProcessEnv) => spawn('/usr/bin/chromium', [
     '-bwsi',
+    '-test-type',
     '-no-sandbox',
     '-disable-gpu',
     '-start-maximized',
