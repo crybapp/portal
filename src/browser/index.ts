@@ -1,5 +1,5 @@
 import { convertKeyCode } from '../utils/keyboard.utils'
-import { xvfb, dbus, openbox, xdotool, chromium, ffmpeg } from './utils'
+import { xvfb, dbus, openbox, xdotool, chromium, ffmpeg, ffmpegaudio } from './utils'
 
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
@@ -28,7 +28,7 @@ export default class VirtualBrowser {
             dbus(env)
             console.log('setting up xvfb...')
             xvfb(env, this.width, this.height, this.bitDepth)
-    
+
             console.log('setting up openbox...')
             openbox(env)
             console.log('setting up chromium...')
@@ -37,7 +37,8 @@ export default class VirtualBrowser {
             console.log('setting up ffmpeg...')
             const id = fetchPortalId(), token = signToken({ id }, 'aperture')
             ffmpeg(env, token, this.width, this.height)
-    
+            ffmpegaudio(env, token)
+
             console.log('setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
             this.xdoin = xdoin

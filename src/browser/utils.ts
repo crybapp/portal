@@ -56,6 +56,26 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
     ]
 })
 
+export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffmpeg', [
+    '-f', 'alsa',
+    '-ac', '2',
+    '-ar', '44100',
+    '-i', 'default',
+    '-vn',
+    
+    '-c:a', 'mp2',
+    '-b:a', '256k',
+    '-f', 'mpegts',
+    `${env.APERTURE_URL}/?t=${token}`
+], {
+    env,
+    stdio: [
+        'ignore',
+        'inherit',
+        'inherit'
+    ]
+})
+
 export const chromium = (env: NodeJS.ProcessEnv) => spawn('/usr/bin/chromium', [
     '-bwsi',
     '-no-sandbox',
