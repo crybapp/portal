@@ -4,5 +4,7 @@ import { argv } from 'yargs'
 export const fetchPortalId = () => {
     if(argv.portalId) return argv.portalId as string
 
-    return os.hostname().split('-')[1] as string
+    const machineId = os.hostname().split('-')[1]
+    if(!machineId) return os.hostname() as string
+    return machineId as string
 }
