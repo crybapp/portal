@@ -89,3 +89,6 @@ typings/
 
 # Compiled JS
 dist
+
+# macOS specific files
+.DS_Store
