@@ -22,6 +22,7 @@ RUN apt-get update && \
 
 # Directory cleanup
 RUN mkdir -p /var/run/dbus
+RUN mkdir -p /root/.config/pulse
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Install Chrome
