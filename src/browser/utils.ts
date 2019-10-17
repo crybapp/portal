@@ -88,12 +88,16 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffm
     ]
 })
 
-export const chromium = (env: NodeJS.ProcessEnv) => spawn('/usr/bin/chromium', [
+export const chromium = (env: NodeJS.ProcessEnv) => spawn('sudo', [
+    '-u',
+    'glados',
+    '/usr/bin/chromium',
     '-bwsi',
     '-test-type',
     '-no-sandbox',
     '-disable-gpu',
     '-start-maximized',
+    '-force-dark-mode',
     '-disable-file-system',
     '-disable-software-rasterizer',
 

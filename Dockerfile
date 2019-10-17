@@ -23,7 +23,6 @@ RUN mkdir /etc/chromium /etc/chromium/policies /etc/chromium/policies/managed /e
 # Add normal user with passwordless sudo
 RUN useradd glados --shell /bin/bash --create-home
 RUN chown glados:glados /home/glados
-RUN echo glados ALL=\(ALL\) NOPASSWD:ALL >> /etc/sudoers
 
 # Switch to glados user and run initial setup
 USER glados
