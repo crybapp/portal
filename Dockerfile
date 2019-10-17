@@ -1,6 +1,6 @@
 FROM node:latest
 
-# Install misc packages including minimal runtime used for executing non GUI Java programs
+# Install audio and other misc packages including minimal runtime used for executing non GUI Java programs
 RUN apt-get update && \
     apt-get clean && \
     apt-get -qqy --no-install-recommends -y install \
@@ -10,11 +10,7 @@ RUN apt-get update && \
     openbox \
     dbus \
     dbus-x11 \
-    sudo
-
-# Install audio packages
-RUN apt-get update && \
-  apt-get -qqy install \
+    sudo \
     pulseaudio \
     socat \
     alsa-utils \
@@ -22,7 +18,6 @@ RUN apt-get update && \
 
 # Directory cleanup
 RUN mkdir -p /var/run/dbus
-RUN mkdir -p /root/.config/pulse
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 # Install Chrome
@@ -32,6 +27,7 @@ RUN mkdir /etc/chromium /etc/chromium/policies /etc/chromium/policies/managed /e
 # Add normal user with passwordless sudo
 RUN useradd glados --shell /bin/bash --create-home
 RUN chown glados:glados /home/glados
+RUN mkdir -p /home/glados/.config/pulse
 
 # Switch to glados user and run initial setup
 USER glados
@@ -54,6 +50,6 @@ RUN rm -rf src
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /bin/pulse-config.pa
-COPY ./configs/pulse_default.pa /root/.config/pulse/default.pa
+COPY ./configs/pulse_default.pa /home/glados/.config/pulse/default.pa
 
 ENTRYPOINT [ "yarn", "start" ]

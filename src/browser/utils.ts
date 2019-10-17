@@ -34,9 +34,12 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
     ]
 })
 
-export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
+export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('sudo', [
+    '-u',
+    'glados',
+    'pulseaudio',
     '--exit-idle-time=-1',
-    '--file=/bin/pulse-config.pa'
+    '--file=/home/glados/.internal/configs/pulse-config.pa'
 ], {
     env,
     stdio: [
@@ -91,7 +94,7 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffm
 export const chromium = (env: NodeJS.ProcessEnv) => spawn('sudo', [
     '-u',
     'glados',
-    '/usr/bin/chromium',
+    'chromium',
     '-bwsi',
     '-test-type',
     '-no-sandbox',
