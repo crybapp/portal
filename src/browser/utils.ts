@@ -34,6 +34,18 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
     ]
 })
 
+export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
+    '--exit-idle-time=-1',
+    '--file=/bin/pulse-config.pa'
+], {
+    env,
+    stdio: [
+        'ignore',
+        'inherit',
+        'inherit'
+    ]
+})
+
 export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, height: number) => spawn('ffmpeg', [
     '-f', 'x11grab',
     '-s', `${width}x${height}`,
@@ -64,7 +76,7 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffm
     '-vn',
     
     '-c:a', 'mp2',
-    '-b:a', '256k',
+    '-b:a', '128k',
     '-f', 'mpegts',
     `${env.APERTURE_URL}/?t=${token}`
 ], {

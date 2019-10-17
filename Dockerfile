@@ -44,5 +44,8 @@ RUN rm -rf src
 
 # Chromium Policies
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
+# Pulseaudio Configuration
+COPY ./configs/pulse_config.pa /bin/pulse-config.pa
+COPY ./configs/pulse_default.pa /root/.config/pulse/default.pa
 
 ENTRYPOINT [ "yarn", "start" ]

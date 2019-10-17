@@ -1,5 +1,5 @@
 import { convertKeyCode } from '../utils/keyboard.utils'
-import { xvfb, dbus, openbox, xdotool, chromium, ffmpeg, ffmpegaudio } from './utils'
+import { xvfb, dbus, openbox, xdotool, chromium, pulseaudio, ffmpeg, ffmpegaudio } from './utils'
 
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
@@ -28,6 +28,8 @@ export default class VirtualBrowser {
             dbus(env)
             console.log('setting up xvfb...')
             xvfb(env, this.width, this.height, this.bitDepth)
+            console.log('setting up pulseaudio...')
+            pulseaudio(env)
 
             console.log('setting up openbox...')
             openbox(env)
