@@ -59,7 +59,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
 export const chromium = (env: NodeJS.ProcessEnv) => spawn('sudo', [
     '-u',
     'glados',
-    '/usr/bin/google-chrome-stable',
+    '/usr/bin/chromium',
     '-bwsi',
     '-test-type',
     '-no-sandbox',
