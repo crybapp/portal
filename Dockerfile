@@ -12,6 +12,14 @@ RUN apt-get update && \
     dbus-x11 \
     sudo
 
+# Install audio packages
+RUN apt-get update && \
+  apt-get -qqy install \
+    pulseaudio \
+    socat \
+    alsa-utils \
+    x11-session-utils
+
 # Directory cleanup
 RUN mkdir -p /var/run/dbus
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/*
