@@ -6,5 +6,6 @@ export const fetchPortalId = () => {
 
     const machineId = os.hostname().split('-')[1]
     if(!machineId) return os.hostname() as string
+    
     return machineId as string
 }
