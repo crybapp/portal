@@ -65,6 +65,7 @@ export const chromium = (env: NodeJS.ProcessEnv) => spawn('sudo', [
     '-no-sandbox',
     '-disable-gpu',
     '-start-maximized',
+    '-force-dark-mode',
     '-disable-file-system',
     '-disable-software-rasterizer',
 
