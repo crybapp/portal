@@ -35,8 +35,7 @@ export default class VirtualBrowser {
             this.setupChromium()
 
             console.log('setting up ffmpeg...')
-            const id = fetchPortalId(), token = signToken({ id }, 'aperture')
-            ffmpeg(env, token, this.width, this.height)
+            this.setupFfmpeg()
     
             console.log('setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
@@ -48,6 +47,7 @@ export default class VirtualBrowser {
         }
     })
 
+    private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, 'aperture'), this.width, this.height).on('close', this.setupFfmpeg)
     private setupChromium = () => chromium(this.env).on('close', this.setupChromium)
 
     handleControllerEvent = (data: any, type: string) => {
