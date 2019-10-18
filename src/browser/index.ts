@@ -26,8 +26,10 @@ export default class VirtualBrowser {
         try {
             console.log('Setting up xvfb...')
             xvfb(env, this.width, this.height, this.bitDepth)
-            console.log('Setting up pulseaudio...')
-            pulseaudio(env)
+            if (process.env.AUDIO_ENABLED) {
+                console.log('Setting up pulseaudio...')
+                pulseaudio(env)
+            }
 
             console.log('Setting up openbox...')
             openbox(env)
@@ -36,7 +38,8 @@ export default class VirtualBrowser {
 
             console.log('Setting up ffmpeg...')
             this.setupFfmpeg()
-            this.setupFfmpegAudio()
+            if (process.env.AUDIO_ENABLED)
+                this.setupFfmpegAudio()
 
             console.log('Setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
