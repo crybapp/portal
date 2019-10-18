@@ -1,6 +1,7 @@
 {
     "AllowFileSelectionDialogs": false,
     "PromptForDownloadLocation": false,
+    "BookmarkBarEnabled": false,
     "URLBlacklist": [
         "file://*",
         "chrome://policy"
