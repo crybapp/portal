@@ -64,7 +64,8 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
 
     '-f', 'mpegts',
     '-c:v', 'mpeg1video',
-    '-q:v', '2',
+    //'-q:v', '2',
+    ‘-b:v', '2400k’,
     '-bf', '0',
 
     `${env.APERTURE_URL}/?t=${token}`
@@ -87,7 +88,6 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffm
     '-f', 'mpegts',
     '-c:a', 'mp2',
     '-b:a', '128k',
-    '-bf', '0',
 
     `${env.APERTURE_URL}/?t=${token}`
 ], {
