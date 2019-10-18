@@ -26,7 +26,7 @@ export default class VirtualBrowser {
         try {
             console.log('Setting up xvfb...')
             xvfb(env, this.width, this.height, this.bitDepth)
-            if (process.env.AUDIO_ENABLED) {
+            if (process.env.AUDIO_ENABLED === 'true') {
                 console.log('Setting up pulseaudio...')
                 pulseaudio(env)
             }
@@ -38,7 +38,7 @@ export default class VirtualBrowser {
 
             console.log('Setting up ffmpeg...')
             this.setupFfmpeg()
-            if (process.env.AUDIO_ENABLED)
+            if (process.env.AUDIO_ENABLED === 'true')
                 this.setupFfmpegAudio()
 
             console.log('Setting up xdotool...')
