@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Start dbus only if it's already not running.
+# Start dbus only if it's not already running.
 if ! pgrep dbus-daemon > /dev/null; then
     echo "Setting up dbus..."
     dbus-daemon --fork --config-file=/usr/share/dbus-1/system.conf
