@@ -30,7 +30,7 @@ RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 RUN rm -rf /home/glados
 
 # Chrome policies
-RUN mkdir -p //etc/opt/chrome/policies/managed /etc/opt/chrome/policies/recommended
+RUN mkdir -p /etc/opt/chrome/policies/managed /etc/opt/chrome/policies/recommended
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home
