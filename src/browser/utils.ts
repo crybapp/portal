@@ -65,7 +65,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
     '-f', 'mpegts',
     '-c:v', 'mpeg1video',
     //'-q:v', '2',
-    ‘-b:v', '2400k’,
+    '-b:v', '2400k',
     '-bf', '0',
 
     `${env.APERTURE_URL}/?t=${token}`
