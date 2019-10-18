@@ -1,6 +1,3 @@
-#load-module module-native-protocol-unix 
-# auth-anonymous=1
-
 # Load the virtual sink and set it as default
 load-module module-virtual-sink sink_name=v1
 set-default-sink v1

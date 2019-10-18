@@ -1,5 +1,5 @@
 import { convertKeyCode } from '../utils/keyboard.utils'
-import { xvfb, dbus, openbox, xdotool, chromium, pulseaudio, ffmpeg, ffmpegaudio } from './utils'
+import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool } from './utils'
 
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
@@ -24,23 +24,21 @@ export default class VirtualBrowser {
         const { env } = this
 
         try {
-            console.log('setting up dbus...')
-            dbus(env)
-            console.log('setting up xvfb...')
+            console.log('Setting up xvfb...')
             xvfb(env, this.width, this.height, this.bitDepth)
-            console.log('setting up pulseaudio...')
+            console.log('Setting up pulseaudio...')
             pulseaudio(env)
 
-            console.log('setting up openbox...')
+            console.log('Setting up openbox...')
             openbox(env)
-            console.log('setting up chromium...')
+            console.log('Setting up chromium...')
             this.setupChromium()
 
-            console.log('setting up ffmpeg...')
+            console.log('Setting up ffmpeg...')
             this.setupFfmpeg()
             this.setupFfmpegAudio()
 
-            console.log('setting up xdotool...')
+            console.log('Setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
             this.xdoin = xdoin
 

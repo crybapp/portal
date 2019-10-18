@@ -1,40 +1,34 @@
 FROM node:latest
 
-# Install audio and other misc packages including minimal runtime used for executing non GUI Java programs
+# Install Chromium, audio and other misc packages including minimal runtime used for executing non GUI Java programs
 RUN apt-get update && \
-    apt-get clean && \
     apt-get -qqy --no-install-recommends -y install \
-    xvfb \
-    xdotool \
-    ffmpeg \
-    openbox \
     dbus \
     dbus-x11 \
-    sudo \
+    consolekit \
+    xvfb \
+    xdotool \
+    openbox \
     pulseaudio \
-    socat \
     alsa-utils \
-    x11-session-utils
+    x11-session-utils \
+    ffmpeg \
+    sudo \
+    socat \
+    grep \
+    procps \
+    chromium
 
 # Directory cleanup
 RUN mkdir -p /var/run/dbus
 RUN rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+RUN rm -rf /home/glados
 
-# Install Chrome
-RUN apt-get update && apt-get -y install chromium
-RUN mkdir /etc/chromium /etc/chromium/policies /etc/chromium/policies/managed /etc/chromium/policies/recommended
+# Chromium policies
+RUN mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended
 
-# Add normal user with passwordless sudo
+# Add normal user
 RUN useradd glados --shell /bin/bash --create-home
-RUN chown glados:glados /home/glados
-RUN mkdir -p /home/glados/.config/pulse
-
-# Switch to glados user and run initial setup
-USER glados
-ENV PATH="/home/glados/bin:${PATH}"
-
-# Switch to root user
-USER root
 
 # Copy information
 WORKDIR /home/glados/.internal
@@ -49,7 +43,6 @@ RUN rm -rf src
 # Chromium Policies
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 # Pulseaudio Configuration
-COPY ./configs/pulse_config.pa /bin/pulse-config.pa
-COPY ./configs/pulse_default.pa /home/glados/.config/pulse/default.pa
+COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "./start.sh" ]
