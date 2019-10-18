@@ -31,7 +31,7 @@ The codebase for `@cryb/portal` is written in JavaScript, utilising TypeScript a
 ```
 cryb/portal/
 └──┐ src # The core source code
-   ├── browser # Class used to start services on the VM, such as Chromium and ffmpeg
+   ├── browser # Class used to start services on the VM, such as Google Chrome and ffmpeg
    ├── clients # Our Express.js setup and WebSocket setup
    ├── config # Services such as queue management, etc
    └── utils # Helper methods

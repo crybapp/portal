@@ -1,7 +1,7 @@
 {
   "name": "@cryb/portal",
   "version": "1.0.0",
-  "description": "The service deployed on VM instances to launch Chromium & more",
+  "description": "The service deployed on VM instances to launch Google Chrome & more",
   "main": "index.js",
   "repository": "https://github.com/crybapp/portal",
   "author": "William Gibson <w.gibbo3@icloud.com>",

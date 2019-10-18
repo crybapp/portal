@@ -1,5 +1,5 @@
 import { convertKeyCode } from '../utils/keyboard.utils'
-import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool } from './utils'
+import { xvfb, pulseaudio, openbox, chrome, ffmpeg, ffmpegaudio, xdotool } from './utils'
 
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
@@ -33,8 +33,8 @@ export default class VirtualBrowser {
 
             console.log('Setting up openbox...')
             openbox(env)
-            console.log('Setting up chromium...')
-            this.setupChromium()
+            console.log('Setting up chrome...')
+            this.setupChrome()
 
             console.log('Setting up ffmpeg...')
             this.setupFfmpeg()
@@ -53,7 +53,7 @@ export default class VirtualBrowser {
 
     private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, 'aperture'), this.width, this.height).on('close', this.setupFfmpeg)
     private setupFfmpegAudio = () => ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, 'aperture')).on('close', this.setupFfmpegAudio)
-    private setupChromium = () => chromium(this.env).on('close', this.setupChromium)
+    private setupChrome = () => chrome(this.env).on('close', this.setupChrome)
 
     handleControllerEvent = (data: any, type: string) => {
         const command = this.fetchCommand(data, type)
