@@ -9,13 +9,13 @@ fi
 # Check if user exists
 if id -u glados > /dev/null 2>&1; then
     echo "Starting portal in glados user..."
-    sudo -u glados yarn start
+    sudo -u glados yarn start $@
 else
     echo "glados user seems to not exist. starting in current user..."
     if [ $(id -u) = 0 ]; then
         echo "--- We'll accept running as root - but it's not recommended nor supported. ---"
     fi
-    yarn start
+    yarn start $@
 fi
 
 echo "All done, shutting down!"
