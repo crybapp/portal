@@ -1,6 +1,6 @@
 FROM node:latest
 
-# Install Chromium, audio and other misc packages including minimal runtime used for executing non GUI Java programs
+# Install Chrome, audio and other misc packages including minimal runtime used for executing non GUI Java programs
 RUN apt-get update && \
     apt-get -qqy --no-install-recommends -y install \
     dbus \
@@ -45,8 +45,8 @@ RUN yarn && yarn build
 # Cleanup
 RUN rm -rf src
 
-# Chromium Policies
-COPY ./configs/chromium_policy.json /etc/opt/chrome/policies/managed/policies.json
+# Chrome Policies
+COPY ./configs/chrome_policies.json /etc/opt/chrome/policies/managed/policies.json
 
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
