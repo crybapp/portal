@@ -33,27 +33,35 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
     ]
 })
 
-export const chromium = (env: NodeJS.ProcessEnv) => spawn('chromium', [
-    '-bwsi',
-    '-test-type',
-    '-no-sandbox',
-    '-disable-gpu',
-    '-start-maximized',
-    '-force-dark-mode',
-    '-disable-file-system',
-    '-disable-software-rasterizer',
-
-    `--display=${env.DISPLAY}`,
-
-    'https://www.google.com'
-], {
-    env,
-    stdio: [
-        'ignore',
-        'inherit',
-        'inherit'
+export const chromium = (env: NodeJS.ProcessEnv) => {
+    const config = [
+        '-bwsi',
+        '-test-type',
+        '-no-sandbox',
+        '-disable-gpu',
+        '-start-maximized',
+        '-force-dark-mode',
+        '-disable-file-system',
+        '-disable-software-rasterizer',
+    
+        `--display=${env.DISPLAY}`
     ]
-})
+
+    if(process.env.IS_CHROMIUM_DARK_MODE === 'false')
+        config.splice(config.indexOf('-force-dark-mode'), 1)
+
+    return spawn('chromium', [
+        ...config,
+        'https://www.google.com'
+    ], {
+        env,
+        stdio: [
+            'ignore',
+            'inherit',
+            'inherit'
+        ]
+    })
+}
 
 export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, height: number) => spawn('ffmpeg', [
     '-f', 'x11grab',
