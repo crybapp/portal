@@ -1,0 +1,6 @@
+# Load the virtual sink and set it as default
+load-module module-virtual-sink sink_name=v1
+set-default-sink v1
+
+# set the monitor of v1 sink to be the default source
+set-default-source v1.monitor
