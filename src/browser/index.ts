@@ -7,15 +7,23 @@ import { fetchPortalId } from '../utils/helpers.utils'
 export default class VirtualBrowser {
     width: number
     height: number
+    videoBitrate: string
+    videoFps: string
+    audioBitrate: string
+    startupUrl: string
     bitDepth: number
     env: NodeJS.ProcessEnv
 
     xdoin: any
     input: object
 
-    constructor(width: number, height: number, bitDepth: number) {
+    constructor(width: number, height: number, videoBitrate: string, videoFps: string, audioBitrate: string, startupUrl: string, bitDepth: number) {
         this.width = width
         this.height = height
+        this.videoBitrate = videoBitrate
+        this.videoFps = videoFps
+        this.audioBitrate = audioBitrate
+        this.startupUrl = startupUrl
         this.bitDepth = bitDepth
         this.env = {...process.env, DISPLAY: ':100'}
     }
@@ -26,7 +34,7 @@ export default class VirtualBrowser {
         try {
             console.log('Setting up xvfb...')
             xvfb(env, this.width, this.height, this.bitDepth)
-            if (process.env.AUDIO_ENABLED === 'true') {
+            if (process.env.AUDIO_ENABLED !== 'false') {
                 console.log('Setting up pulseaudio...')
                 pulseaudio(env)
             }
@@ -38,7 +46,7 @@ export default class VirtualBrowser {
 
             console.log('Setting up ffmpeg...')
             this.setupFfmpeg()
-            if (process.env.AUDIO_ENABLED === 'true')
+            if (process.env.AUDIO_ENABLED !== 'false')
                 this.setupFfmpegAudio()
 
             console.log('Setting up xdotool...')
@@ -51,9 +59,10 @@ export default class VirtualBrowser {
         }
     })
 
-    private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, 'aperture'), this.width, this.height).on('close', this.setupFfmpeg)
-    private setupFfmpegAudio = () => ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, 'aperture')).on('close', this.setupFfmpegAudio)
-    private setupChromium = () => chromium(this.env).on('close', this.setupChromium)
+    private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, 'aperture'),
+                                       this.width, this.height, this.videoFps, this.videoBitrate).on('close', this.setupFfmpeg)
+    private setupFfmpegAudio = () => ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, 'aperture'), this.audioBitrate).on('close', this.setupFfmpegAudio)
+    private setupChromium = () => chromium(this.env, this.startupUrl).on('close', this.setupChromium)
 
     handleControllerEvent = (data: any, type: string) => {
         const command = this.fetchCommand(data, type)
@@ -76,8 +85,6 @@ export default class VirtualBrowser {
             console.log('paste', text)
 
             return null
-            // exec(`pbcopy "${text}"`)
-            // return 'keypress ctrl+v'
         } else if(type === 'MOUSE_SCROLL') {
             const { scrollUp } = data
 

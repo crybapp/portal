@@ -44,4 +44,4 @@ COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 
-ENTRYPOINT [ "./start.sh" ]
+ENTRYPOINT [ "bash", "./start.sh" ]

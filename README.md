@@ -55,19 +55,11 @@ We recommend that you run the following services alongside `@cryb/portal`, but i
 * `@cryb/web`
 * `@cryb/aperture`
 
-You also need to install the required dependencies, by running either:
+You also need to install the required dependencies, by running `yarn`
 
-```
-npm install
-```
-or
-```
-yarn
-```
+Ensure that `.env.example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
 
-Ensure that `.env-example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
-
-In this file, you'll need some values. Documentation is available in the `.env-example` file.
+In this file, you'll need some values. Documentation is available in the `.env.example` file.
 
 ### Running the app locally
 
@@ -77,14 +69,9 @@ Make sure `@cryb/portals` and `@cryb/aperture` are running on port 1337 and 9000
 #### Starting @cryb/portal
 We recommend that you use a service like [Docker](https://docker.com) to start an instance of `@cryb/portal`.
 
-To run `@cryb/portal` in development mode on Docker, run either:
-```
-npm run docker:dev
-```
-or
-```
-yarn docker:dev
-```
+To run `@cryb/portal` in development mode on Docker, run `yarn docker:dev`.
+
+Use `yarn docker:build` to build an image for deployment in production.
 
 ## Questions / Issues
 
