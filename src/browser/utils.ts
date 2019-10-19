@@ -1,11 +1,10 @@
 import { spawn } from 'child_process'
 
-export const dbus = (env: NodeJS.ProcessEnv) => spawn('sudo', [
-    'dbus-daemon',
-    '--nofork',
-    '--config-file=/usr/share/dbus-1/system.conf'
+export const xvfb = (env: NodeJS.ProcessEnv, width: number, height: number, bitDepth: number) => spawn('Xvfb', [
+    env.DISPLAY,
+    '-ac',
+    '-screen', '0', `${width}x${height}x${bitDepth}`
 ], {
-    env,
     stdio: [
         'ignore',
         'inherit',
@@ -13,11 +12,11 @@ export const dbus = (env: NodeJS.ProcessEnv) => spawn('sudo', [
     ]
 })
 
-export const xvfb = (env: NodeJS.ProcessEnv, width: number, height: number, bitDepth: number) => spawn('Xvfb', [
-    env.DISPLAY,
-    '-ac',
-    '-screen', '0', `${width}x${height}x${bitDepth}`
+export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
+    '--exit-idle-time=-1',
+    '--file=/tmp/pulse_config.pa'
 ], {
+    env,
     stdio: [
         'ignore',
         'inherit',
@@ -34,18 +33,49 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
     ]
 })
 
+export const chromium = (env: NodeJS.ProcessEnv) => {
+    const config = [
+        '-bwsi',
+        '-test-type',
+        '-no-sandbox',
+        '-disable-gpu',
+        '-start-maximized',
+        '-force-dark-mode',
+        '-disable-file-system',
+        '-disable-software-rasterizer',
+    
+        `--display=${env.DISPLAY}`
+    ]
+
+    if(process.env.IS_CHROMIUM_DARK_MODE === 'false')
+        config.splice(config.indexOf('-force-dark-mode'), 1)
+
+    return spawn('chromium', [
+        ...config,
+        'https://www.google.com'
+    ], {
+        env,
+        stdio: [
+            'ignore',
+            'inherit',
+            'inherit'
+        ]
+    })
+}
+
 export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, height: number) => spawn('ffmpeg', [
     '-f', 'x11grab',
     '-s', `${width}x${height}`,
     '-r', '30',
     '-i', env.DISPLAY,
+    '-an',
 
-    '-preset', 'ultrafast',
-    '-tune', 'zerolatency',
-    '-qscale', '0',
-    
-    '-c:v', 'mpeg1video',
     '-f', 'mpegts',
+    '-c:v', 'mpeg1video',
+    //'-q:v', '2',
+    '-b:v', '2400k',
+    '-bf', '0',
+
     `${env.APERTURE_URL}/?t=${token}`
 ], {
     env,
@@ -56,22 +86,18 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
     ]
 })
 
-export const chromium = (env: NodeJS.ProcessEnv) => spawn('sudo', [
-    '-u',
-    'glados',
-    '/usr/bin/chromium',
-    '-bwsi',
-    '-test-type',
-    '-no-sandbox',
-    '-disable-gpu',
-    '-start-maximized',
-    '-force-dark-mode',
-    '-disable-file-system',
-    '-disable-software-rasterizer',
+export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffmpeg', [
+    '-f', 'alsa',
+    '-ac', '2',
+    '-ar', '44100',
+    '-i', 'default',
+    '-vn',
 
-    `--display=${env.DISPLAY}`,
+    '-f', 'mpegts',
+    '-c:a', 'mp2',
+    '-b:a', '128k',
 
-    'https://www.google.com'
+    `${env.APERTURE_URL}/?t=${token}`
 ], {
     env,
     stdio: [

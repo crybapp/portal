@@ -1,5 +1,5 @@
 import { convertKeyCode } from '../utils/keyboard.utils'
-import { xvfb, dbus, openbox, xdotool, chromium, ffmpeg } from './utils'
+import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool } from './utils'
 
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
@@ -24,20 +24,24 @@ export default class VirtualBrowser {
         const { env } = this
 
         try {
-            console.log('setting up dbus...')
-            dbus(env)
-            console.log('setting up xvfb...')
+            console.log('Setting up xvfb...')
             xvfb(env, this.width, this.height, this.bitDepth)
-    
-            console.log('setting up openbox...')
+            if (process.env.AUDIO_ENABLED === 'true') {
+                console.log('Setting up pulseaudio...')
+                pulseaudio(env)
+            }
+
+            console.log('Setting up openbox...')
             openbox(env)
-            console.log('setting up chromium...')
+            console.log('Setting up chromium...')
             this.setupChromium()
 
-            console.log('setting up ffmpeg...')
+            console.log('Setting up ffmpeg...')
             this.setupFfmpeg()
-    
-            console.log('setting up xdotool...')
+            if (process.env.AUDIO_ENABLED === 'true')
+                this.setupFfmpegAudio()
+
+            console.log('Setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
             this.xdoin = xdoin
 
@@ -48,6 +52,7 @@ export default class VirtualBrowser {
     })
 
     private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, 'aperture'), this.width, this.height).on('close', this.setupFfmpeg)
+    private setupFfmpegAudio = () => ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, 'aperture')).on('close', this.setupFfmpegAudio)
     private setupChromium = () => chromium(this.env).on('close', this.setupChromium)
 
     handleControllerEvent = (data: any, type: string) => {
