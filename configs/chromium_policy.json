@@ -7,12 +7,23 @@
         "chrome://policy"
     ],
     "ExtensionInstallWhitelist": [
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm", // uBlock Origin
+        "gcbommkclmclpchllfjekcdonpmejbdp", // HTTPS Everywhere
+        "klbibkeccnjlkjkiokjodocebajanakg", // The Great Suspender
+        "eimadpbcbfnmbkopoojfekhnkhdbieeh"  // Dark Reader (optional, 'cause it can break Websites)
     ],
     "ExtensionInstallBlacklist": [
         "*"
     ],
     "ExtensionInstallForcelist": [
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-    ]
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm", // uBlock Origin
+        "klbibkeccnjlkjkiokjodocebajanakg", // The great Suspender
+        "gcbommkclmclpchllfjekcdonpmejbdp"  // HTTPS Everywhere
+    ],
+    
+    "AutofillAddressEnabled": false,
+    "AutofillCreditCardEnabled": false,
+    "BrowserAddPersonEnabled": false,
+    "BrowserSignin": 0,
+    "PasswordManagerEnabled": false
 }
