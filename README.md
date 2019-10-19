@@ -55,7 +55,7 @@ We recommend that you run the following services alongside `@cryb/portal`, but i
 * `@cryb/web`
 * `@cryb/aperture`
 
-You also need to install the required dependencies, by running `yarn`
+You also need to install the required dependencies by running `yarn`
 
 Ensure that `.env.example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
 
