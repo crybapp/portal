@@ -59,9 +59,9 @@ export default class VirtualBrowser {
         }
     })
 
-    private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, 'aperture'),
+    private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, 'streaming'),
                                        this.width, this.height, this.videoFps, this.videoBitrate).on('close', this.setupFfmpeg)
-    private setupFfmpegAudio = () => ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, 'aperture'), this.audioBitrate).on('close', this.setupFfmpegAudio)
+    private setupFfmpegAudio = () => ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, 'streaming'), this.audioBitrate).on('close', this.setupFfmpegAudio)
     private setupChromium = () => chromium(this.env, this.startupUrl).on('close', this.setupChromium)
 
     handleControllerEvent = (data: any, type: string) => {
