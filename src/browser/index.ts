@@ -59,9 +59,23 @@ export default class VirtualBrowser {
         }
     })
 
-    private setupFfmpeg = () => ffmpeg(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY), this.width, this.height, this.videoFps, this.videoBitrate).on('close', this.setupFfmpeg)
-    private setupFfmpegAudio = () => ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY), this.audioBitrate).on('close', this.setupFfmpegAudio)
+    private setupFfmpeg = () => {
+        ffmpeg(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+                this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
+                    console.log('ffmpeg has suddenly stopped - attempting a restart')
+                    setTimeout(this.setupFfmpeg, 2500)
+                })
+    }
+    private setupFfmpegAudio = () => {
+        ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+                    this.audioBitrate).on('close', () => {
+                        console.log('ffmpeg audio has suddenly stopped - attempting a restart')
+                        setTimeout(this.setupFfmpegAudio, 2500)
+                    }))
+    }
 
+    // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
+    // then stop it after Chromium is closed for a normal shutdown.
     private setupChromium = () => chromium(this.env, this.startupUrl).on('close', this.setupChromium)
 
     handleControllerEvent = (data: any, type: string) => {
