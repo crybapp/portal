@@ -14,7 +14,8 @@ export const xvfb = (env: NodeJS.ProcessEnv, width: number, height: number, bitD
 
 export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
     '--exit-idle-time=-1',
-    '--file=/tmp/pulse_config.pa'
+    '--file=/tmp/pulse_config.pa',
+    '--daemonize=no'
 ], {
     env,
     stdio: [
