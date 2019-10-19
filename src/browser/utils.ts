@@ -33,7 +33,7 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
     ]
 })
 
-export const chromium = (env: NodeJS.ProcessEnv) => {
+export const chrome = (env: NodeJS.ProcessEnv) => {
     const config = [
         '-bwsi',
         '-test-type',
@@ -47,7 +47,7 @@ export const chromium = (env: NodeJS.ProcessEnv) => {
         `--display=${env.DISPLAY}`
     ]
 
-    if(process.env.IS_CHROMIUM_DARK_MODE === 'false')
+    if(process.env.IS_CHROME_DARK_MODE === 'false')
         config.splice(config.indexOf('-force-dark-mode'), 1)
 
     return spawn('google-chrome-stable', [
