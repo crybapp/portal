@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "dotenv": "^8.1.0",
-    "esm": "^3.2.25",
     "jsonwebtoken": "^8.5.1",
     "keysym": "^0.0.6",
     "node-pre-gyp": "^0.13.0",
