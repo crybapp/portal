@@ -71,7 +71,7 @@ export default class VirtualBrowser {
                     this.audioBitrate).on('close', () => {
                         console.log('ffmpeg audio has suddenly stopped - attempting a restart')
                         setTimeout(this.setupFfmpegAudio, 1000)
-                    }))
+                    })
     }
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
