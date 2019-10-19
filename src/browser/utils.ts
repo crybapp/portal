@@ -75,7 +75,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
     '-b:v', bitrate,
     '-bf', '0',
 
-    `${env.STREAMING_URL}/?t=${token}`
+    `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
 ], {
     env,
     stdio: [
@@ -96,7 +96,7 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: stri
     '-c:a', 'mp2',
     '-b:a', bitrate,
 
-    `${env.STREAMING_URL}/?t=${token}`
+    `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
 ], {
     env,
     stdio: [

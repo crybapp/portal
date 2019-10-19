@@ -1,6 +1,4 @@
 import { sign, verify } from 'jsonwebtoken'
 
-type KeyType = 'portals' | 'streaming'
-
-export const signToken = (data: any, key: KeyType, headers: object = {}) => sign(data, process.env[`${key.toUpperCase()}_KEY`], headers)
-export const verifyToken = (token: string, key: KeyType) => verify(token, process.env[`${key.toUpperCase()}_KEY`])
+export const signToken = (data: any, key: string, headers: object = {}) => sign(data, key, headers)
+export const verifyToken = (token: string, key: string) => verify(token, key)
