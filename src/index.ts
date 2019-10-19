@@ -8,6 +8,7 @@ new PortalsClient(
         config.width,
         config.height,
         config.videoBitrate,
+        config.videoFps,
         config.audioBitrate,
 
         config.startupUrl,
