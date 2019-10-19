@@ -75,4 +75,4 @@ Use `yarn docker:build` to build an image for deployment in production.
 
 ## Questions / Issues
 
-If you have an issues with `@cryb/portal`, please either open a GitHub issue, or contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
+If you have an issues with `@cryb/portal`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
