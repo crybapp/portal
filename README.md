@@ -2,7 +2,7 @@
 
 _**Portal** - VM instance_
 
-![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal) ![GitHub](https://img.shields.io/github/license/crybapp/portal) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
+[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal)](https://github.com/crybapp/portal/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/portal)](https://github.com/crybapp/portal/blob/master/LICENSE) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
 
 ## Docs
 * [Info](#info)
@@ -14,7 +14,7 @@ _**Portal** - VM instance_
     * [Running the app locally](#running-the-app-locally)
         * [Background services](#background-services)
         * [Starting @cryb/portal](#starting-@cryb/portal)
-* [Questions / Issues](#questions-/-issues)
+* [Questions / Issues](#questions--issues)
 
 ## Info
 `@cryb/portal` is the instance deployed onto VM machines to act as the 'Virtual browser'.
@@ -75,4 +75,4 @@ Use `yarn docker:build` to build an image for deployment in production.
 
 ## Questions / Issues
 
-If you have an issues with `@cryb/portal`, please either open a GitHub issue, or contact a maintainer.
+If you have an issues with `@cryb/portal`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
