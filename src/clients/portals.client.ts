@@ -19,6 +19,7 @@ export default class WRTCClient {
         this.browser = browser
 
         this.setupWebSocket()
+        browser.init()
     }
 
     setupWebSocket = () => {
