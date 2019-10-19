@@ -1,6 +1,9 @@
 FROM node:latest
 
-# Install Chrome, audio and other misc packages including minimal runtime used for executing non GUI Java programs
+# Add Google Chrome repositories
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list
+# Install Google Chrome, audio and other misc packages including minimal runtime used for executing non GUI Java programs
 RUN apt-get update && \
     apt-get -qqy --no-install-recommends -y install \
     dbus \
@@ -17,12 +20,7 @@ RUN apt-get update && \
     socat \
     grep \
     procps \
-    wget
-
-# Install the latest version of Google Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add
-RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
-RUN apt-get update && apt-get -y install google-chrome-stable
+    google-chrome-stable
 
 # Directory cleanup
 RUN mkdir -p /var/run/dbus
