@@ -52,7 +52,7 @@ export const chromium = (env: NodeJS.ProcessEnv) => {
 
     return spawn('chromium', [
         ...config,
-        'https://www.google.com'
+        `${env.STARTUP_URL}`
     ], {
         env,
         stdio: [
