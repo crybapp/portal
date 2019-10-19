@@ -19,7 +19,6 @@ export default class WRTCClient {
         this.browser = browser
 
         this.setupWebSocket()
-        browser.init().then(this.emitBeacon)
     }
 
     setupWebSocket = () => {
@@ -56,7 +55,7 @@ export default class WRTCClient {
     emitBeacon = () => {
         console.log('emitting beacon to portals server')
         this.ready = true
-            
+
         const id = fetchPortalId(), token = signToken({ id }, 'portals')
         this.send({ op: 2, d: { token, type: 'portal' } })
     }

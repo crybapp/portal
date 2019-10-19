@@ -1,11 +1,10 @@
-FROM node:latest
+FROM node:lts-buster
 
 # Install Chromium, audio and other misc packages including minimal runtime used for executing non GUI Java programs
 RUN apt-get update && \
     apt-get -qqy --no-install-recommends -y install \
     dbus \
     dbus-x11 \
-    consolekit \
     xvfb \
     xdotool \
     openbox \
