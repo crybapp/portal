@@ -18,7 +18,7 @@
     "jsonwebtoken": "^8.5.1",
     "keysym": "^0.0.6",
     "node-pre-gyp": "^0.13.0",
-    "tsc-watch": "^2.4.0",
+    "tsc-watch": "^4.0.0",
     "typescript": "^3.6.4",
     "ws": "^7.1.2",
     "yargs": "^14.0.0"
