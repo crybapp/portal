@@ -19,6 +19,9 @@ RUN apt-get update && \
     fonts-ipafont-mincho \
     fonts-ipafont-gothic \
     fonts-unfonts-core \
+    fonts-noto-color-emoji \
+    fonts-noto \
+    fonts-nanum \
     pulseaudio \
     alsa-utils \
     x11-session-utils \
