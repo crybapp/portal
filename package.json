@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.10",
-    "@types/jsonwebtoken": "^8.3.4",
+    "@types/jsonwebtoken": "^8.3.5",
     "@types/keysym": "^0.0.1",
     "@types/node": "^12.7.2",
     "@types/ws": "^6.0.3",
