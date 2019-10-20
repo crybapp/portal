@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@types/fluent-ffmpeg@^2.1.10":
-  version "2.1.10"
-  resolved "https://registry.yarnpkg.com/@types/fluent-ffmpeg/-/fluent-ffmpeg-2.1.10.tgz#e6a73fc671cb97b4f5e06e00ac86efb8cb162015"
-  integrity sha512-QWwPavtDBW9e3ndfquVgFZRc2GDQEEf0d3vDNg1hS6HztvYWdjCA2paxAVPay+PmFlcKAZQcfvnskdktBQNCaA==
+"@types/fluent-ffmpeg@^2.1.11":
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/@types/fluent-ffmpeg/-/fluent-ffmpeg-2.1.11.tgz#4706613e9e3bbd653ff801b23c5fdac976f62ec0"
+  integrity sha512-Mt4nAJVsQdYAya0I/VEQ51PXgzi/UVGf/mih3uRnnQVC3ZaugEzEdnISjkGcqyHuKClVG2KrMbw6+krh3YS50A==
   dependencies:
     "@types/node" "*"
 
