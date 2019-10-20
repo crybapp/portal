@@ -2,7 +2,7 @@
 
 _**Portal** - VM instance_
 
-![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal) ![GitHub](https://img.shields.io/github/license/crybapp/portal) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
+[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal)](https://github.com/crybapp/portal/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/portal)](https://github.com/crybapp/portal/blob/master/LICENSE) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
 
 ## Docs
 * [Info](#info)
@@ -14,7 +14,7 @@ _**Portal** - VM instance_
     * [Running the app locally](#running-the-app-locally)
         * [Background services](#background-services)
         * [Starting @cryb/portal](#starting-@cryb/portal)
-* [Questions / Issues](#questions-/-issues)
+* [Questions / Issues](#questions--issues)
 
 ## Info
 `@cryb/portal` is the instance deployed onto VM machines to act as the 'Virtual browser'.
@@ -55,19 +55,11 @@ We recommend that you run the following services alongside `@cryb/portal`, but i
 * `@cryb/web`
 * `@cryb/aperture`
 
-You also need to install the required dependencies, by running either:
+You also need to install the required dependencies by running `yarn`
 
-```
-npm install
-```
-or
-```
-yarn
-```
+Ensure that `.env.example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
 
-Ensure that `.env-example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
-
-In this file, you'll need some values. Documentation is available in the `.env-example` file.
+In this file, you'll need some values. Documentation is available in the `.env.example` file.
 
 ### Running the app locally
 
@@ -77,15 +69,10 @@ Make sure `@cryb/portals` and `@cryb/aperture` are running on port 1337 and 9000
 #### Starting @cryb/portal
 We recommend that you use a service like [Docker](https://docker.com) to start an instance of `@cryb/portal`.
 
-To run `@cryb/portal` in development mode on Docker, run either:
-```
-npm run docker:dev
-```
-or
-```
-yarn docker:dev
-```
+To run `@cryb/portal` in development mode on Docker, run `yarn docker:dev`.
+
+Use `yarn docker:build` to build an image for deployment in production.
 
 ## Questions / Issues
 
-If you have an issues with `@cryb/portal`, please either open a GitHub issue, or contact a maintainer.
+If you have an issues with `@cryb/portal`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.

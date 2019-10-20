@@ -50,7 +50,7 @@ export default class WRTCClient {
     emitBeacon = () => {
         console.log('emitting beacon to portals server')
 
-        const id = fetchPortalId(), token = signToken({ id }, 'portals')
+        const id = fetchPortalId(), token = signToken({ id }, process.env.PORTALS_KEY)
         this.send({ op: 2, d: { token, type: 'portal' } })
     }
     

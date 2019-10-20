@@ -28,6 +28,7 @@ RUN mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home
+RUN usermod -a -G audio glados
 
 # Copy information
 WORKDIR /home/glados/.internal
@@ -44,4 +45,4 @@ COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 
-ENTRYPOINT [ "./start.sh" ]
+ENTRYPOINT [ "bash", "./start.sh" ]

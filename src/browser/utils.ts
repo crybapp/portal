@@ -14,7 +14,8 @@ export const xvfb = (env: NodeJS.ProcessEnv, width: number, height: number, bitD
 
 export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
     '--exit-idle-time=-1',
-    '--file=/tmp/pulse_config.pa'
+    '--file=/tmp/pulse_config.pa',
+    '--daemonize=no'
 ], {
     env,
     stdio: [
@@ -33,7 +34,7 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
     ]
 })
 
-export const chromium = (env: NodeJS.ProcessEnv) => {
+export const chromium = (env: NodeJS.ProcessEnv, startupUrl) => {
     const config = [
         '-bwsi',
         '-test-type',
@@ -52,7 +53,7 @@ export const chromium = (env: NodeJS.ProcessEnv) => {
 
     return spawn('chromium', [
         ...config,
-        'https://www.google.com'
+        startupUrl
     ], {
         env,
         stdio: [
@@ -63,20 +64,19 @@ export const chromium = (env: NodeJS.ProcessEnv) => {
     })
 }
 
-export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, height: number) => spawn('ffmpeg', [
+export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, height: number, fps: string, bitrate: string) => spawn('ffmpeg', [
     '-f', 'x11grab',
     '-s', `${width}x${height}`,
-    '-r', '30',
+    '-r', fps,
     '-i', env.DISPLAY,
     '-an',
 
     '-f', 'mpegts',
     '-c:v', 'mpeg1video',
-    //'-q:v', '2',
-    '-b:v', '2400k',
+    '-b:v', bitrate,
     '-bf', '0',
 
-    `${env.APERTURE_URL}/?t=${token}`
+    `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
 ], {
     env,
     stdio: [
@@ -86,7 +86,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
     ]
 })
 
-export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffmpeg', [
+export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
     '-f', 'alsa',
     '-ac', '2',
     '-ar', '44100',
@@ -95,9 +95,9 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string) => spawn('ffm
 
     '-f', 'mpegts',
     '-c:a', 'mp2',
-    '-b:a', '128k',
+    '-b:a', bitrate,
 
-    `${env.APERTURE_URL}/?t=${token}`
+    `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
 ], {
     env,
     stdio: [
