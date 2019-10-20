@@ -8,6 +8,20 @@ RUN apt-get update && \
     xvfb \
     xdotool \
     openbox \
+    fonts-opensymbol \
+    fonts-symbola \
+    fonts-liberation \
+    fonts-freefont-ttf \
+    fonts-droid-fallback \
+    fonts-dejavu-core \
+    fonts-arphic-ukai \
+    fonts-arphic-uming \
+    fonts-ipafont-mincho \
+    fonts-ipafont-gothic \
+    fonts-unfonts-core \
+    fonts-noto-color-emoji \
+    fonts-noto \
+    fonts-nanum \
     pulseaudio \
     alsa-utils \
     x11-session-utils \
