@@ -8,19 +8,16 @@
     ],
     "ExtensionInstallWhitelist": [
         "cjpalhdlnbpafiamejdnhcphjbkeiagm",
-        "gcbommkclmclpchllfjekcdonpmejbdp",
-        "klbibkeccnjlkjkiokjodocebajanakg",
-        "eimadpbcbfnmbkopoojfekhnkhdbieeh"
+        "gcbommkclmclpchllfjekcdonpmejbdp"
     ],
     "ExtensionInstallBlacklist": [
         "*"
     ],
     "ExtensionInstallForcelist": [
         "cjpalhdlnbpafiamejdnhcphjbkeiagm",
-        "klbibkeccnjlkjkiokjodocebajanakg",
         "gcbommkclmclpchllfjekcdonpmejbdp"
     ],
-    
+
     "AutofillAddressEnabled": false,
     "AutofillCreditCardEnabled": false,
     "BrowserAddPersonEnabled": false,

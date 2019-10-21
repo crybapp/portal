@@ -73,6 +73,20 @@ To run `@cryb/portal` in development mode on Docker, run `yarn docker:dev`.
 
 Use `yarn docker:build` to build an image for deployment in production.
 
+### Chromium Extensions
+
+#### Installing Extensions
+To install Extensions into the Chromium Webbrowser of your Cryb instances, add the ID of the Extension in Question to `configs/chromium_policy.json` under `"ExtensionInstallWhitelist"` and `"ExtensionInstallForcelist"`.
+The new Extensions should now be installed by default.
+
+#### Recommended Extensions
+Here are a few Extensions recommended in certain Use-Cases:
+
+| Name | ID | Chrome Webstore Link | Recommended Use-Case |
+|---------------------|----------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| The Great Suspender | klbibkeccnjlkjkiokjodocebajanakg | https://chrome.google.com/webstore/detail/the-great-suspender/klbibkeccnjlkjkiokjodocebajanakg | This can improve performance, if your Cryb instances have unused tabs running in the background for hours on end |
+| Dark Reader | eimadpbcbfnmbkopoojfekhnkhdbieeh | https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh | Adds Dark Mode to Websites, that don't have one. Has the potential to break Websites |
+
 ## Questions / Issues
 
 If you have an issues with `@cryb/portal`, please either open a GitHub issue, or contact a maintainer.
