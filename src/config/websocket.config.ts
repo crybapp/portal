@@ -12,7 +12,7 @@ export default () => {
 
     ws.addEventListener('open', () => console.log('Connected to @cryb/portals via WS'))
     ws.addEventListener('close', () => console.log('Disconnected from @cryb/portals WS'))
-    ws.addEventListener('error', error => console.error('Error during WS connection to @cryb/portals: ', error))
+    ws.addEventListener('error', () => console.error('Error during WS connection to @cryb/portals WS'))
     
     return ws
 }

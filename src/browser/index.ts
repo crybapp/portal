@@ -20,6 +20,7 @@ export default class VirtualBrowser {
 
     ffmpeg: ChildProcess
     ffmpegAudio: ChildProcess
+    isStreaming: boolean
 
     constructor(width: number, height: number, videoBitrate: string, videoFps: string, audioBitrate: string, startupUrl: string, bitDepth: number) {
         this.width = width
@@ -59,6 +60,8 @@ export default class VirtualBrowser {
     })
 
     beginStreams = (id: string) => {
+        this.isStreaming = true
+
         console.log('Setting up ffmpeg...')
         this.setupFfmpeg(id)
         
@@ -70,6 +73,8 @@ export default class VirtualBrowser {
         // TODO: Add server id
         this.ffmpeg = ffmpeg(this.env, signToken({ id }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
                 this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
+                    if(!this.isStreaming) return
+
                     console.log('ffmpeg has suddenly stopped - attempting a restart')
                     setTimeout(this.setupFfmpeg, 1000)
                 })
@@ -78,12 +83,16 @@ export default class VirtualBrowser {
         // TODO: Add server id
         this.ffmpegAudio = ffmpegaudio(this.env, signToken({ id }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
                     this.audioBitrate).on('close', () => {
+                        if(!this.isStreaming) return
+                        
                         console.log('ffmpeg audio has suddenly stopped - attempting a restart')
                         setTimeout(this.setupFfmpegAudio, 1000)
                     })
     }
 
     endStreams = () => {
+        this.isStreaming = false
+
         if(this.ffmpeg)
             this.ffmpeg.kill()
 
