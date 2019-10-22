@@ -53,13 +53,19 @@ export default class PortalsClient {
         const token = signToken(this.id ? { id: this.id } : {}, process.env.PORTALS_KEY)
         this.send({ op: 2, d: { token, type: 'server' } })
     }
+
+    reset = () => {
+        // TODO: Add reset method to clear Chromium history
+    }
     
     handleMessage = (message: WSEvent) => {
         const { op, d, t } = message
 
         if(op === 0) {
             if(CONTROLLER_EVENT_TYPES.indexOf(t) > -1)
-                return this.browser.handleControllerEvent(d, t)
+                this.browser.handleControllerEvent(d, t)
+            else if(t === 'RESET')
+                this.reset()
         } else if(op === 10) {
             console.log(d)
 
