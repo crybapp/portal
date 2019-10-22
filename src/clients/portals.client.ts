@@ -48,9 +48,9 @@ export default class PortalsClient {
     }
 
     emitBeacon = () => {
-        console.log('emitting beacon to portals server')
+        console.log('emitting beacon to portals server', this.id)
 
-        const token = signToken({}, process.env.PORTALS_KEY)
+        const token = signToken(this.id ? { id: this.id } : {}, process.env.PORTALS_KEY)
         this.send({ op: 2, d: { token, type: 'server' } })
     }
     
