@@ -6,7 +6,9 @@ import createWebSocket, { WSEvent } from '../config/websocket.config'
 
 const CONTROLLER_EVENT_TYPES = ['KEY_DOWN', 'KEY_UP', 'PASTE_TEXT', 'MOUSE_MOVE', 'MOUSE_SCROLL', 'MOUSE_DOWN', 'MOUSE_UP']
 
-export default class WRTCClient {
+export default class PortalsClient {
+    id: string
+
     peers: Map<string, any>
     browser: VirtualBrowser
     websocket: WebSocket
@@ -22,9 +24,7 @@ export default class WRTCClient {
         const websocket = createWebSocket()
         this.websocket = websocket
 
-        websocket.addEventListener('open', () => {
-            this.emitBeacon()
-        })
+        websocket.addEventListener('open', this.emitBeacon)
 
         websocket.addEventListener('message', ({ data }) => {
             let json: any
@@ -40,6 +40,7 @@ export default class WRTCClient {
 
         websocket.addEventListener('close', () => {
             this.websocket = null
+            this.browser.endStreams()
 
             console.log('Attempting reconnect to @cryb/portals via WS')
             setTimeout(this.setupWebSocket, 2500)
@@ -56,9 +57,17 @@ export default class WRTCClient {
     handleMessage = (message: WSEvent) => {
         const { op, d, t } = message
 
-        if(op === 0)
+        if(op === 0) {
             if(CONTROLLER_EVENT_TYPES.indexOf(t) > -1)
-                this.browser.handleControllerEvent(d, t)
+                return this.browser.handleControllerEvent(d, t)
+        } else if(op === 10) {
+            console.log(d)
+
+            const { id } = d
+            this.id = id
+
+            this.browser.beginStreams(id)
+        }
     }
 
     send = (object: WSEvent) => this.websocket.send(JSON.stringify(object))
