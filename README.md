@@ -76,8 +76,8 @@ Use `yarn docker:build` to build an image for deployment in production.
 ### Chromium Extensions
 
 #### Installing Extensions
-To install Extensions into the Chromium Webbrowser of your Cryb instances, add the ID of the Extension in Question to `configs/chromium_policy.json` under `"ExtensionInstallWhitelist"` and `"ExtensionInstallForcelist"`.
-The new Extensions should now be installed by default.
+To install any extra extensions into the Chromium browser of your Cryb instances, add the ID of the extension in question to `configs/chromium_policy.json` under `"ExtensionInstallWhitelist"` and `"ExtensionInstallForcelist"`.
+The new extension should now be installed by default.
 
 #### Recommended Extensions
 Here are a few Extensions recommended in certain Use-Cases:
