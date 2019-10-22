@@ -2,7 +2,6 @@ import { convertKeyCode } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool } from './utils'
 
 import { signToken } from '../utils/generate.utils'
-import { fetchPortalId } from '../utils/helpers.utils'
 
 export default class VirtualBrowser {
     width: number
@@ -60,14 +59,16 @@ export default class VirtualBrowser {
     })
 
     private setupFfmpeg = () => {
-        ffmpeg(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+        // TODO: Add server id
+        ffmpeg(this.env, signToken({  }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
                 this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
                     console.log('ffmpeg has suddenly stopped - attempting a restart')
                     setTimeout(this.setupFfmpeg, 1000)
                 })
     }
     private setupFfmpegAudio = () => {
-        ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+        // TODO: Add server id
+        ffmpegaudio(this.env, signToken({  }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
                     this.audioBitrate).on('close', () => {
                         console.log('ffmpeg audio has suddenly stopped - attempting a restart')
                         setTimeout(this.setupFfmpegAudio, 1000)

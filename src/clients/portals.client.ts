@@ -2,7 +2,6 @@ import WebSocket from 'ws'
 import VirtualBrowser from '../browser'
 
 import { signToken } from '../utils/generate.utils'
-import { fetchPortalId } from '../utils/helpers.utils'
 import createWebSocket, { WSEvent } from '../config/websocket.config'
 
 const CONTROLLER_EVENT_TYPES = ['KEY_DOWN', 'KEY_UP', 'PASTE_TEXT', 'MOUSE_MOVE', 'MOUSE_SCROLL', 'MOUSE_DOWN', 'MOUSE_UP']
@@ -50,8 +49,8 @@ export default class WRTCClient {
     emitBeacon = () => {
         console.log('emitting beacon to portals server')
 
-        const id = fetchPortalId(), token = signToken({ id }, process.env.PORTALS_KEY)
-        this.send({ op: 2, d: { token, type: 'portal' } })
+        const token = signToken({}, process.env.PORTALS_KEY)
+        this.send({ op: 2, d: { token, type: 'server' } })
     }
     
     handleMessage = (message: WSEvent) => {
