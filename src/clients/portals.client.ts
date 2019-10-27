@@ -2,6 +2,7 @@ import WebSocket from 'ws'
 import VirtualBrowser from '../browser'
 
 import { signToken } from '../utils/generate.utils'
+import { fetchHostname } from '../utils/helpers.utils'
 import createWebSocket, { WSEvent } from '../config/websocket.config'
 
 const CONTROLLER_EVENT_TYPES = ['KEY_DOWN', 'KEY_UP', 'PASTE_TEXT', 'MOUSE_MOVE', 'MOUSE_SCROLL', 'MOUSE_DOWN', 'MOUSE_UP']
@@ -50,8 +51,17 @@ export default class PortalsClient {
     emitBeacon = () => {
         console.log('emitting beacon to portals server', this.id)
 
-        const token = signToken(this.id ? { id: this.id } : {}, process.env.PORTALS_KEY)
+        const token = signToken(this.fetchBeaconMetadata(), process.env.PORTALS_KEY)
         this.send({ op: 2, d: { token, type: 'server' } })
+    }
+
+    private fetchBeaconMetadata = () => {
+        let metadata = {}
+
+        if(this.id) metadata = {...metadata, id: this.id}
+        if(fetchHostname()) metadata = {...metadata, hostname: fetchHostname()}
+
+        return metadata
     }
 
     reset = () => {
