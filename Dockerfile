@@ -58,5 +58,7 @@ RUN rm -rf src
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
+# Openbox Configuration
+COPY ./configs/openbox_config.xml /var/lib/openbox/openbox_config.xml
 
 ENTRYPOINT [ "bash", "./start.sh" ]
