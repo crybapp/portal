@@ -76,7 +76,7 @@ export default class VirtualBrowser {
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
     // then stop it after Chromium is closed for a normal shutdown.
-    private setupChromium = () => chromium(this.env, this.startupUrl).on('close', this.setupChromium)
+    private setupChromium = () => chromium(this.env, this.width, this.height, this.startupUrl).on('close', this.setupChromium)
 
     handleControllerEvent = (data: any, type: string) => {
         const command = this.fetchCommand(data, type)
