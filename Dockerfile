@@ -45,6 +45,9 @@ RUN mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended
 RUN useradd glados --shell /bin/bash --create-home
 RUN usermod -a -G audio glados
 
+# Enable user namespaces in Debian
+RUN echo 1 > /proc/sys/kernel/unprivileged_userns_clone
+
 # Copy information
 WORKDIR /home/glados/.internal
 COPY . .
