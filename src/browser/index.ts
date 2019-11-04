@@ -1,8 +1,9 @@
+import { ChildProcess } from 'child_process'
+
 import { convertKeyCode } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool } from './utils'
 
 import { signToken } from '../utils/generate.utils'
-import { fetchPortalId } from '../utils/helpers.utils'
 
 export default class VirtualBrowser {
     width: number
@@ -16,6 +17,10 @@ export default class VirtualBrowser {
 
     xdoin: any
     input: object
+
+    ffmpeg: ChildProcess
+    ffmpegAudio: ChildProcess
+    isStreaming: boolean
 
     constructor(width: number, height: number, videoBitrate: string, videoFps: string, audioBitrate: string, startupUrl: string, bitDepth: number) {
         this.width = width
@@ -44,11 +49,6 @@ export default class VirtualBrowser {
             console.log('Setting up chromium...')
             this.setupChromium()
 
-            console.log('Setting up ffmpeg...')
-            this.setupFfmpeg()
-            if (process.env.AUDIO_ENABLED !== 'false')
-                this.setupFfmpegAudio()
-
             console.log('Setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
             this.xdoin = xdoin
@@ -59,19 +59,45 @@ export default class VirtualBrowser {
         }
     })
 
-    private setupFfmpeg = () => {
-        ffmpeg(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+    beginStreams = (id: string) => {
+        this.isStreaming = true
+
+        console.log('Setting up ffmpeg...')
+        this.setupFfmpeg(id)
+        
+        if (process.env.AUDIO_ENABLED !== 'false')
+            this.setupFfmpegAudio(id)
+    }
+
+    private setupFfmpeg = (id: string) => {
+        // TODO: Add server id
+        this.ffmpeg = ffmpeg(this.env, signToken({ id }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
                 this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
+                    if(!this.isStreaming) return
+
                     console.log('ffmpeg has suddenly stopped - attempting a restart')
                     setTimeout(this.setupFfmpeg, 1000)
                 })
     }
-    private setupFfmpegAudio = () => {
-        ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+    private setupFfmpegAudio = (id: string) => {
+        // TODO: Add server id
+        this.ffmpegAudio = ffmpegaudio(this.env, signToken({ id }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
                     this.audioBitrate).on('close', () => {
+                        if(!this.isStreaming) return
+                        
                         console.log('ffmpeg audio has suddenly stopped - attempting a restart')
                         setTimeout(this.setupFfmpegAudio, 1000)
                     })
+    }
+
+    endStreams = () => {
+        this.isStreaming = false
+
+        if(this.ffmpeg)
+            this.ffmpeg.kill()
+
+        if(this.ffmpegAudio)
+            this.ffmpegAudio.kill()
     }
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),

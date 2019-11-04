@@ -1,11 +1,11 @@
-import os from 'os'
-import { argv } from 'yargs'
+import { hostname as _hostname } from 'os'
 
-export const fetchPortalId = () => {
-    if(argv.portalId) return argv.portalId as string
+export const fetchHostname = () => {
+    const hostname = _hostname()
+    if(!hostname) return null
 
-    const machineId = os.hostname().split('-')[1]
-    if(!machineId) return os.hostname() as string
+    const parts = hostname.split('-')
+    if(parts[0] !== 'cryb_portal') return null
 
-    return machineId as string
+    return hostname
 }

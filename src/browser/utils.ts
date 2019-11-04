@@ -90,7 +90,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
 })
 
 export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
-    '-f', 'alsa',
+    '-f', 'pulse',
     '-ac', '2',
     '-ar', '44100',
     '-i', 'default',

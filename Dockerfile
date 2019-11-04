@@ -23,11 +23,9 @@ RUN apt-get update && \
     fonts-noto \
     fonts-nanum \
     pulseaudio \
-    alsa-utils \
     x11-session-utils \
     ffmpeg \
     sudo \
-    socat \
     grep \
     procps \
     chromium
