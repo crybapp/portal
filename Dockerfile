@@ -56,6 +56,8 @@ RUN rm -rf src
 
 # Chromium Policies
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
+# Chromium Preferences
+COPY ./configs/master_preferences.json /etc/chromium/master_preferences
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 # Openbox Configuration
