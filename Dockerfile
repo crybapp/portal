@@ -30,7 +30,8 @@ RUN apt-get update && \
     socat \
     grep \
     procps \
-    chromium
+    chromium \
+    chromium-sandbox
 
 # Directory cleanup
 RUN mkdir -p /var/run/dbus
