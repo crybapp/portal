@@ -38,7 +38,6 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
     const config = [
         '-bwsi',
         '-test-type',
-        '-no-sandbox',
         '-disable-gpu',
         '-start-maximized',
         '-force-dark-mode',
