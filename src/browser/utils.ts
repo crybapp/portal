@@ -25,7 +25,7 @@ export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
     ]
 })
 
-export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [ '--config-file=/var/lib/openbox/openbox_config.xml' ], {
+export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [ '--config-file', '/var/lib/openbox/openbox_config.xml' ], {
     env,
     stdio: [
         'ignore',
