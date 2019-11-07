@@ -15,7 +15,9 @@ export const xvfb = (env: NodeJS.ProcessEnv, width: number, height: number, bitD
 export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
     '--exit-idle-time=-1',
     '--file=/tmp/pulse_config.pa',
-    '--daemonize=no'
+    '-n',
+    '--daemonize=false',
+    '--disallow-module-loading'
 ], {
     env,
     stdio: [
@@ -90,7 +92,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
 })
 
 export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
-    '-f', 'alsa',
+    '-f', 'pulse',
     '-ac', '2',
     '-ar', '44100',
     '-i', 'default',
@@ -99,6 +101,7 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: stri
     '-f', 'mpegts',
     '-c:a', 'mp2',
     '-b:a', bitrate,
+    '-muxdelay', '0.001',
 
     `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
 ], {
