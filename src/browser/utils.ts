@@ -101,7 +101,6 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: stri
     '-f', 'mpegts',
     '-c:a', 'mp2',
     '-b:a', bitrate,
-    '-muxdelay', '0.001',
 
     `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
 ], {
