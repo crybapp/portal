@@ -33,6 +33,13 @@ RUN apt-get update && apt-get -y dist-upgrade && \
     && mkdir -p /var/run/dbus \
     && mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
+    
+ #Install Widevine Component for Netflix
+RUN wget https://dl.google.com/widevine-cdm/4.10.1582.1-linux-x64.zip
+RUN unzip 4.10.1582.1-linux-x64.zip
+RUN sudo mv libwidevinecdm.so /usr/lib/chromium
+RUN sudo chmod 644 /usr/lib/chromium/libwidevinecdm.so
+RUN rm 4.10.1582.1-linux-x64.zip LICENSE.txt manifest.json
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home && usermod -a -G audio glados
