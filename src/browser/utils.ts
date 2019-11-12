@@ -15,7 +15,9 @@ export const xvfb = (env: NodeJS.ProcessEnv, width: number, height: number, bitD
 export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
     '--exit-idle-time=-1',
     '--file=/tmp/pulse_config.pa',
-    '--daemonize=no'
+    '-n',
+    '--daemonize=false',
+    '--disallow-module-loading'
 ], {
     env,
     stdio: [
@@ -25,7 +27,7 @@ export const pulseaudio = (env: NodeJS.ProcessEnv) => spawn('pulseaudio', [
     ]
 })
 
-export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
+export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [ '--config-file', '/var/lib/openbox/openbox_config.xml' ], {
     env,
     stdio: [
         'ignore',
@@ -34,7 +36,7 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', [], {
     ]
 })
 
-export const chromium = (env: NodeJS.ProcessEnv, startupUrl) => {
+export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, startupUrl) => {
     const config = [
         '-bwsi',
         '-test-type',
@@ -44,7 +46,10 @@ export const chromium = (env: NodeJS.ProcessEnv, startupUrl) => {
         '-force-dark-mode',
         '-disable-file-system',
         '-disable-software-rasterizer',
-    
+
+        '--window-position=0,0',
+        `--window-size=${width},${height}`,
+
         `--display=${env.DISPLAY}`
     ]
 
@@ -87,7 +92,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
 })
 
 export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
-    '-f', 'alsa',
+    '-f', 'pulse',
     '-ac', '2',
     '-ar', '44100',
     '-i', 'default',

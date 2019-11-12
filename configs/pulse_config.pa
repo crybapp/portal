@@ -1,3 +1,7 @@
+load-module module-null-sink
+load-module module-native-protocol-unix
+load-module module-always-sink
+
 # Load the virtual sink and set it as default
 load-module module-virtual-sink sink_name=v1
 set-default-sink v1
