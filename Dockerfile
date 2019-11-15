@@ -33,6 +33,13 @@ RUN apt-get update && apt-get -y dist-upgrade && \
     && mkdir -p /var/run/dbus \
     && mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
+    
+# Install Widevine component for Chromium
+RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/versions.txt | tail -n 1) && \
+    wget "https://dl.google.com/widevine-cdm/$WIDEVINE_VERSION-linux-x64.zip" -O /tmp/widevine.zip && \
+    unzip -p /tmp/widevine.zip libwidevinecdm.so > /usr/lib/chromium/libwidevinecdm.so && \
+    chmod 644 /usr/lib/chromium/libwidevinecdm.so && \
+    rm /tmp/widevine.zip
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home && usermod -a -G audio glados
