@@ -9,7 +9,9 @@ export default class VirtualBrowser {
     height: number
     videoBitrate: string
     videoFps: string
+    videoPort: number
     audioBitrate: string
+    audioPort: number
     startupUrl: string
     bitDepth: number
     env: NodeJS.ProcessEnv
@@ -44,11 +46,6 @@ export default class VirtualBrowser {
             console.log('Setting up chromium...')
             this.setupChromium()
 
-            console.log('Setting up ffmpeg...')
-            this.setupFfmpeg()
-            if (process.env.AUDIO_ENABLED !== 'false')
-                this.setupFfmpegAudio()
-
             console.log('Setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
             this.xdoin = xdoin
@@ -59,15 +56,15 @@ export default class VirtualBrowser {
         }
     })
 
-    private setupFfmpeg = () => {
-        ffmpeg(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+    setupFfmpeg = () => {
+        ffmpeg(this.env, this.videoPort,
                 this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
                     console.log('ffmpeg has suddenly stopped - attempting a restart')
                     setTimeout(this.setupFfmpeg, 1000)
                 })
     }
-    private setupFfmpegAudio = () => {
-        ffmpegaudio(this.env, signToken({ id: fetchPortalId() }, process.env.STREAMING_KEY || process.env.APERTURE_KEY),
+    setupFfmpegAudio = () => {
+        ffmpegaudio(this.env, this.audioPort,
                     this.audioBitrate).on('close', () => {
                         console.log('ffmpeg audio has suddenly stopped - attempting a restart')
                         setTimeout(this.setupFfmpegAudio, 1000)

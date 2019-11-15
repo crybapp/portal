@@ -60,6 +60,18 @@ export default class WRTCClient {
         if(op === 0)
             if(CONTROLLER_EVENT_TYPES.indexOf(t) > -1)
                 this.browser.handleControllerEvent(d, t)
+
+        if(op === 10) {
+            if(d.audioport && d.videoport) {
+                console.log('Setting up ffmpeg...')
+                this.browser.audioPort = d.audioport
+                this.browser.videoPort = d.videoport
+
+                this.browser.setupFfmpeg()
+                if (process.env.AUDIO_ENABLED !== 'false')
+                    this.browser.setupFfmpegAudio()
+            }
+        }
     }
 
     send = (object: WSEvent) => this.websocket.send(JSON.stringify(object))

@@ -69,19 +69,21 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
     })
 }
 
-export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, height: number, fps: string, bitrate: string) => spawn('ffmpeg', [
+export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string) => spawn('ffmpeg', [
     '-f', 'x11grab',
     '-s', `${width}x${height}`,
     '-r', fps,
     '-i', env.DISPLAY,
     '-an',
 
-    '-f', 'mpegts',
-    '-c:v', 'mpeg1video',
+    '-f', 'mp4',
+    '-c:v', 'libx264',
+    '-preset', 'ultrafast',
+    '-tune', 'zerolatency',
     '-b:v', bitrate,
     '-bf', '0',
 
-    `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
+    `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}/?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
 ], {
     env,
     stdio: [
@@ -91,18 +93,18 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, token: string, width: number, hei
     ]
 })
 
-export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
+export const ffmpegaudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string) => spawn('ffmpeg', [
     '-f', 'pulse',
     '-ac', '2',
-    '-ar', '44100',
+    '-ar', '48000',
     '-i', 'default',
     '-vn',
 
-    '-f', 'mpegts',
-    '-c:a', 'mp2',
+    '-f', 'ogg',
+    '-c:a', 'opus',
     '-b:a', bitrate,
 
-    `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
+    `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}/?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
 ], {
     env,
     stdio: [
