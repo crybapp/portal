@@ -76,7 +76,7 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, heig
     '-i', env.DISPLAY,
     '-an',
 
-    '-f', 'mp4',
+    '-f', 'rtp',
     '-c:v', 'libx264',
     '-preset', 'ultrafast',
     '-tune', 'zerolatency',
@@ -100,8 +100,8 @@ export const ffmpegaudio = (env: NodeJS.ProcessEnv, port: number, bitrate: strin
     '-i', 'default',
     '-vn',
 
-    '-f', 'ogg',
-    '-c:a', 'opus',
+    '-f', 'rtp',
+    '-c:a', 'libopus',
     '-b:a', bitrate,
 
     `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}/?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
