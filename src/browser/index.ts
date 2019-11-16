@@ -25,7 +25,7 @@ export default class VirtualBrowser {
         this.audioBitrate = audioBitrate
         this.startupUrl = startupUrl
         this.bitDepth = bitDepth
-        this.env = {...process.env, DISPLAY: ':100'}
+        this.env = process.env
     }
 
     init = () => new Promise((resolve, reject) => {
@@ -80,7 +80,7 @@ export default class VirtualBrowser {
 
     handleControllerEvent = (data: any, type: string) => {
         const command = this.fetchCommand(data, type)
-        if(!command) return
+        if(!command || !this.xdoin) return
         if(!this.xdoin.writable) this.xdoin = xdotool(this.env).stdin
 
         this.xdoin.write(`${command}\n`)
