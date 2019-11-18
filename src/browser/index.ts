@@ -1,5 +1,5 @@
 import { convertKeyCode } from '../utils/keyboard.utils'
-import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool } from './utils'
+import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool, gstreamer, gstreameraudio } from './utils'
 
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
@@ -57,14 +57,14 @@ export default class VirtualBrowser {
     })
 
     setupFfmpeg = () => {
-        ffmpeg(this.env, this.videoPort,
+        gstreamer(this.env, this.videoPort,
                 this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
                     console.log('ffmpeg has suddenly stopped - attempting a restart')
                     setTimeout(this.setupFfmpeg, 1000)
                 })
     }
     setupFfmpegAudio = () => {
-        ffmpegaudio(this.env, this.audioPort,
+        gstreameraudio(this.env, this.audioPort,
                     this.audioBitrate).on('close', () => {
                         console.log('ffmpeg audio has suddenly stopped - attempting a restart')
                         setTimeout(this.setupFfmpegAudio, 1000)
