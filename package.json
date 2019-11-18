@@ -11,7 +11,7 @@
     "build": "tsc",
     "docker:dev": "yarn docker:build && yarn docker:run",
     "docker:build": "docker build -t cryb/portal .",
-    "docker:run": "docker run --rm -it --net=host --shm-size=\"1gb\" cryb/portal"
+    "docker:run": "docker run --rm -it --net=bridge --shm-size=\"1gb\" cryb/portal"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
