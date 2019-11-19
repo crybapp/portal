@@ -79,8 +79,9 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, heig
     '-f', 'rtp',
     '-c:v', 'libvpx',
     '-b:v', bitrate,
-    '-crf', '20',
-    '-bf', '0',
+    '-crf', '10',
+    '-speed', '8',
+    '-quality', 'realtime',
 
     `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
 ], {
@@ -93,18 +94,19 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, heig
 })
 
 export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string) => spawn('gst-launch-1.0', [
-    'ximagesrc', 'use-damage=0 !',
-    'video/x-raw,',
-    `width=${width},`,
-    `height=${height},`,
-    `framerate=${fps}/1 !`,
-    'videoscale', 'method=0 !',
-    'videoconvert !',
-    'vp8enc', 'error-reilient=1 !',
-    'rtpvp8pay !',
-    'udpsink', 
-    `host=${env.STREAMING_URL || env.APERTURE_URL}`,
-    `port=${port}`
+    '-v',
+    'ximagesrc', 'use-damage=0', 
+    '!', 'videoconvert', 
+    '!', `video/x-raw,width=${width},height=${height},framerate=${fps}/1`, 
+    `!`, 'vp8enc', 
+        'error-resilient=1', 
+        `target-bitrate=${bitrate}`, 
+        'deadline=50000',
+        'buffer-size=0', 
+    '!', 'rtpvp8pay', 
+    '!','udpsink', 
+        `host=${env.STREAMING_URL || env.APERTURE_URL}`,
+        `port=${port}`
 ], {
     env,
     stdio: [
@@ -115,17 +117,15 @@ export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, h
 })
 
 export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string) => spawn('gst-launch-1.0', [
-    "pulsesrc !",
-    "audioconvert !",
-    "audioresample !",
-    "audio/x-raw,",
-    "channels=2,",
-    "rate=44100 !",
-    `opusenc bitrate=${bitrate} !`,
-    "rtpopuspay !",
-    "udpsink",
-    `host=${env.STREAMING_URL || env.APERTURE_URL}`,
-    `port=${port}`
+    "-v", "pulsesrc", 
+    "!", "audioresample", 
+    "!", "audio/x-raw,channels=2,rate=24000", 
+    "!", `opusenc`, 
+        `bitrate=${bitrate}`,
+    `!`, "rtpopuspay", 
+    "!", "udpsink",
+        `host=${env.STREAMING_URL || env.APERTURE_URL}`,
+        `port=${port}`
 ], {
     env,
     stdio: [
@@ -137,14 +137,17 @@ export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: st
 
 export const ffmpegaudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string) => spawn('ffmpeg', [
     '-f', 'pulse',
-    '-ac', '2',
-    '-ar', '16000',
+    '-ac', '1',
+    '-ar', '36000',
     '-i', 'default',
     '-vn',
 
     '-f', 'rtp',
     '-c:a', 'libopus',
     '-b:a', bitrate,
+    '-compression_level', '10',
+    '-frame_duration', '20',
+    '-application', 'lowdelay',
 
     `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
 ], {

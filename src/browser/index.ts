@@ -57,7 +57,7 @@ export default class VirtualBrowser {
     })
 
     setupFfmpeg = () => {
-        gstreamer(this.env, this.videoPort,
+        ffmpeg(this.env, this.videoPort,
                 this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
                     console.log('ffmpeg has suddenly stopped - attempting a restart')
                     setTimeout(this.setupFfmpeg, 1000)

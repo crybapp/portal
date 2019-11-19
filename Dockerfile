@@ -1,5 +1,9 @@
 FROM node:lts-buster
 
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.old && \
+    echo "deb http://ftp.us.debian.org/debian/ buster main contrib non-free\r\ndeb-src http://ftp.us.debian.org/debian/ buster main contrib non-free" \
+    > /etc/apt/sources.list
+
 # Install Chromium, audio and other misc packages, cleanup, create Chromium policies folders, workarounds
 RUN apt-get update && apt-get -y dist-upgrade && \
     apt-get --no-install-recommends -y install \
@@ -38,6 +42,7 @@ RUN apt-get update && apt-get -y dist-upgrade && \
         gstreamer1.0-gtk3 \
         gstreamer1.0-qt5 \
         gstreamer1.0-pulseaudio \
+        ffmpeg \
         sudo \
         grep \
         procps \
