@@ -28,7 +28,7 @@
     "@types/jsonwebtoken": "^8.3.5",
     "@types/keysym": "^0.0.1",
     "@types/node": "^12.11.1",
-    "@types/ws": "^6.0.3",
+    "@types/ws": "^6.0.4",
     "@types/yargs": "^13.0.3"
   }
 }
