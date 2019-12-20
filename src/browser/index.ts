@@ -13,6 +13,7 @@ export default class VirtualBrowser {
     audioBitrate: string
     audioPort: number
     startupUrl: string
+    streamingIp: string
     bitDepth: number
     env: NodeJS.ProcessEnv
 
@@ -57,18 +58,29 @@ export default class VirtualBrowser {
     })
 
     setupFfmpeg = () => {
-        ffmpeg(this.env, this.videoPort,
-                this.width, this.height, this.videoFps, this.videoBitrate).on('close', () => {
-                    console.log('ffmpeg has suddenly stopped - attempting a restart')
-                    setTimeout(this.setupFfmpeg, 1000)
-                })
+        gstreamer(
+            this.env, 
+            this.videoPort,
+            this.width, 
+            this.height, 
+            this.videoFps, 
+            this.videoBitrate,
+            this.streamingIp
+        ).on('close', () => {
+            console.log('ffmpeg has suddenly stopped - attempting a restart')
+            setTimeout(this.setupFfmpeg, 1000)
+        })
     }
     setupFfmpegAudio = () => {
-        gstreameraudio(this.env, this.audioPort,
-                    this.audioBitrate).on('close', () => {
-                        console.log('ffmpeg audio has suddenly stopped - attempting a restart')
-                        setTimeout(this.setupFfmpegAudio, 1000)
-                    })
+        gstreameraudio(
+            this.env, 
+            this.audioPort,
+            this.audioBitrate,
+            this.streamingIp,
+        ).on('close', () => {
+            console.log('ffmpeg audio has suddenly stopped - attempting a restart')
+            setTimeout(this.setupFfmpegAudio, 1000)
+        })
     }
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
@@ -90,16 +102,16 @@ export default class VirtualBrowser {
             const pressType = type.split('_')[1].toLowerCase(),
                 { keyCode, ctrlKey: ctrl, shiftKey: shift } = data
 
-            return `key${pressType} '${convertKeyCode(keyCode, { ctrl, shift })}'`
+            return `key${pressType} --clearmodifiers '${convertKeyCode(keyCode, { ctrl, shift })}'`
         } else if(type === 'PASTE_TEXT') {
-            const { text } = data as { text: string }
-            console.log('paste', text)
+            const { clipText } = data as { clipText: string }
+            console.log('paste', clipText)
 
-            return null
+            return `type --clearmodifiers --delay 0 ${clipText}`
         } else if(type === 'MOUSE_SCROLL') {
             const { scrollUp } = data
 
-            return `key ${scrollUp ? 'Down' : 'Up'}`
+            return `key --clearmodifiers ${scrollUp ? 'Down' : 'Up'}`
         } else if(typeHeader === 'MOUSE') {
             const { x, y } = data
             let { button } = data
@@ -107,9 +119,9 @@ export default class VirtualBrowser {
             if(type === 'MOUSE_MOVE')
                 return `mousemove ${x} ${y}`
             else if(type === 'MOUSE_DOWN')
-                return `mousedown ${button}`
+                return `mousedown --clearmodifiers ${button}`
             else if(type === 'MOUSE_UP')
-                return `mouseup ${button}`
+                return `mouseup --clearmodifiers ${button}`
             else return null
         } else return null
     }

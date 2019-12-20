@@ -46,7 +46,6 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
         '-force-dark-mode',
         '-disable-file-system',
         '-disable-software-rasterizer',
-
         '--window-position=0,0',
         `--window-size=${width},${height}`,
 
@@ -56,7 +55,7 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
     if(process.env.IS_CHROMIUM_DARK_MODE === 'false')
         config.splice(config.indexOf('-force-dark-mode'), 1)
 
-    return spawn('chromium', [
+    return spawn('google-chrome', [
         ...config,
         startupUrl
     ], {
@@ -79,9 +78,11 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, heig
     '-f', 'rtp',
     '-c:v', 'libvpx',
     '-b:v', bitrate,
-    '-crf', '10',
-    '-speed', '8',
+    '-crf', '30',
+    '-speed', '1',
     '-quality', 'realtime',
+    '-slices', '3',
+    '-threads', '3',
 
     `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
 ], {
@@ -93,19 +94,21 @@ export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, heig
     ]
 })
 
-export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string) => spawn('gst-launch-1.0', [
+export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string, streamingIp) => spawn('gst-launch-1.0', [
     '-v',
     'ximagesrc', 'use-damage=0', 
     '!', 'videoconvert', 
     '!', `video/x-raw,width=${width},height=${height},framerate=${fps}/1`, 
     `!`, 'vp8enc', 
+        'cpu-used=8',
         'error-resilient=1', 
         `target-bitrate=${bitrate}`, 
         'deadline=50000',
-        'buffer-size=0', 
+	'threads=2',
+        'token-partitions=2',	
     '!', 'rtpvp8pay', 
     '!','udpsink', 
-        `host=${env.STREAMING_URL || env.APERTURE_URL}`,
+        `host=${streamingIp}`,
         `port=${port}`
 ], {
     env,
@@ -116,7 +119,7 @@ export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, h
     ]
 })
 
-export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string) => spawn('gst-launch-1.0', [
+export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string, streamingIp: string) => spawn('gst-launch-1.0', [
     "-v", "pulsesrc", 
     "!", "audioresample", 
     "!", "audio/x-raw,channels=2,rate=24000", 
@@ -124,7 +127,7 @@ export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: st
         `bitrate=${bitrate}`,
     `!`, "rtpopuspay", 
     "!", "udpsink",
-        `host=${env.STREAMING_URL || env.APERTURE_URL}`,
+        `host=${streamingIp}`,
         `port=${port}`
 ], {
     env,
