@@ -62,16 +62,32 @@ export default class WRTCClient {
                 this.browser.handleControllerEvent(d, t)
 
         if(op === 10) {
-            if(d.audioport && d.videoport) {
-                console.log('Setting up ffmpeg...')
-                this.browser.audioPort = d.audioport
-                this.browser.videoPort = d.videoport
+            if(!d.audioport || !d.videoport || !d.janusAddress)
+                return
 
-                this.browser.setupFfmpeg()
-                if (process.env.AUDIO_ENABLED !== 'false')
-                    this.browser.setupFfmpegAudio()
-            }
+            this.browser.audioPort = d.audioport
+            this.browser.videoPort = d.videoport
+            this.browser.streamingIp = d.janusAddress
+
+            this.setupBrowser()
         }
+
+        if(op === 20) {
+            if(!d.apertureAddress)
+                return
+
+            this.browser.streamingIp = d.apertureAddress
+            this.browser.videoPort = d.aperturePort
+            this.browser.audioPort = d.aperturePort
+
+            this.setupBrowser()
+        }
+    }
+
+    setupBrowser = () => {
+        this.browser.setupFfmpeg()
+        if (process.env.AUDIO_ENABLED !== 'false')
+            this.browser.setupFfmpegAudio()
     }
 
     send = (object: WSEvent) => this.websocket.send(JSON.stringify(object))
