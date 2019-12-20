@@ -46,7 +46,6 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
         '-force-dark-mode',
         '-disable-file-system',
         '-disable-software-rasterizer',
-        '--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
         '--window-position=0,0',
         `--window-size=${width},${height}`,
 
@@ -56,7 +55,7 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
     if(process.env.IS_CHROMIUM_DARK_MODE === 'false')
         config.splice(config.indexOf('-force-dark-mode'), 1)
 
-    return spawn('chromium', [
+    return spawn('google-chrome', [
         ...config,
         startupUrl
     ], {
