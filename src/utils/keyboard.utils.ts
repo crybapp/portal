@@ -123,6 +123,8 @@ export const convertKeyCode = (code: number, { ctrl, shift }: ConvertKeyCodeConf
             char = 'ctrl+v'
         else if(char == 'a')
             char = 'ctrl+a'
+        else if(char == 'f')
+            char = 'ctrl+f'
         
 
     return char
