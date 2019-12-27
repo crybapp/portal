@@ -105,9 +105,8 @@ export default class VirtualBrowser {
             return `key${pressType} --clearmodifiers '${convertKeyCode(keyCode, { ctrl, shift })}'`
         } else if(type === 'PASTE_TEXT') {
             const { text } = data as { text: string }
-            console.log('paste', text)
-
-            return null
+            
+            return `type --clearmodifiers --delay 0 ${text}`
         } else if(type === 'MOUSE_SCROLL') {
             const { scrollUp } = data
 
