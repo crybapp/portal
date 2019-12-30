@@ -1,4 +1,5 @@
-import WebSocket from 'ws'
+import { Client, Message } from '@cryb/mesa'
+
 import VirtualBrowser from '../browser'
 
 import { signToken } from '../utils/generate.utils'
@@ -9,41 +10,34 @@ const CONTROLLER_EVENT_TYPES = ['KEY_DOWN', 'KEY_UP', 'PASTE_TEXT', 'MOUSE_MOVE'
 
 export default class WRTCClient {
     peers: Map<string, any>
+
+    mesa: Client
     browser: VirtualBrowser
-    websocket: WebSocket
 
     constructor(browser: VirtualBrowser) {
         this.peers = new Map()
         this.browser = browser
 
-        browser.init().then(this.setupWebSocket)
+        browser.init().then(this.setupMesa)
     }
 
-    setupWebSocket = () => {
-        const websocket = createWebSocket()
-        this.websocket = websocket
+    setupMesa = () => {
+        const client = new Client(process.env.PORTALS_WS_URL)
 
-        websocket.addEventListener('open', () => {
+        client.on('connected', () => {
             this.emitBeacon()
         })
 
-        websocket.addEventListener('message', ({ data }) => {
-            let json: any
-
-            try {
-                json = JSON.parse(data.toString())
-            } catch(error) {
-                return console.error(error)
-            }
-
-            this.handleMessage(json)
+        client.on('message', message => {
+            this.handleMessage(message)
         })
 
-        websocket.addEventListener('close', () => {
-            this.websocket = null
+        client.on('disconnected', () => {
+            console.log('Disconnected from @cryb/portals, reconnecting...')
+        })
 
-            console.log('Attempting reconnect to @cryb/portals via WS')
-            setTimeout(this.setupWebSocket, 2500)
+        client.on('error', error => {
+            console.log('Error during connection to @cryb/portals', error)
         })
     }
 
@@ -51,16 +45,14 @@ export default class WRTCClient {
         console.log('emitting beacon to portals server')
 
         const id = fetchPortalId(), token = signToken({ id }, process.env.PORTALS_KEY)
-        this.send({ op: 2, d: { token, type: 'portal' } })
+        this.mesa.send(new Message(2, { token, type: 'portal' }))
     }
     
-    handleMessage = (message: WSEvent) => {
-        const { op, d, t } = message
+    handleMessage = (message: Message) => {
+        const { opcode, data, type } = message
 
-        if(op === 0)
-            if(CONTROLLER_EVENT_TYPES.indexOf(t) > -1)
-                this.browser.handleControllerEvent(d, t)
+        if(opcode === 0)
+            if(CONTROLLER_EVENT_TYPES.indexOf(type) > -1)
+                this.browser.handleControllerEvent(data, type)
     }
-
-    send = (object: WSEvent) => this.websocket.send(JSON.stringify(object))
 }
