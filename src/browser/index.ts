@@ -17,7 +17,8 @@ export default class VirtualBrowser {
     xdoin: any
     input: object
 
-    constructor(width: number, height: number, videoBitrate: string, videoFps: string, audioBitrate: string, startupUrl: string, bitDepth: number) {
+    constructor(width: number, height: number, videoBitrate: string, videoFps: string,
+                audioBitrate: string, startupUrl: string, bitDepth: number) {
         this.width = width
         this.height = height
         this.videoBitrate = videoBitrate
