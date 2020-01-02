@@ -68,7 +68,7 @@ export default class WRTCClient {
             this.browser.audioPort = d.audioport
             this.browser.videoPort = d.videoport
             
-            if(d.janusAddress == "127.0.0.1" && process.env.NODE_ENV) {
+            if(d.janusAddress == "localhost") {
                 this.browser.streamingIp = "host.docker.internal"
             } else  {
                 this.browser.streamingIp = d.janusAddress
