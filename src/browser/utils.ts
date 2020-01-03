@@ -37,18 +37,17 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', ['--config-f
 })
 
 export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, startupUrl) => {
-	const config = [
-		'-bwsi',
-		'-test-type',
-		'-no-sandbox',
-		'-disable-gpu',
-		'-start-maximized',
-		'-force-dark-mode',
-		'-disable-file-system',
-		'-disable-software-rasterizer',
-
-		'--window-position=0,0',
-		`--window-size=${width},${height}`,
+    const config = [
+        '-bwsi',
+        '-test-type',
+        '-no-sandbox',
+        '-disable-gpu',
+        '-start-maximized',
+        '-force-dark-mode',
+        '-disable-file-system',
+        '-disable-software-rasterizer',
+        '--window-position=0,0',
+        `--window-size=${width},${height}`,
 
 		`--display=${env.DISPLAY}`
 	]
@@ -56,39 +55,80 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
 	if (process.env.IS_CHROMIUM_DARK_MODE === 'false')
 		config.splice(config.indexOf('-force-dark-mode'), 1)
 
-	return spawn('chromium', [
-		...config,
-		startupUrl
-	], {
-		env,
-		stdio: [
-			'ignore',
-			'inherit',
-			'inherit'
-		]
-	})
+    return spawn('google-chrome', [
+        ...config,
+        startupUrl
+    ], {
+        env,
+        stdio: [
+            'ignore',
+            'inherit',
+            'inherit'
+        ]
+    })
 }
 
-export const ffmpeg = (
-	env: NodeJS.ProcessEnv,
-	token: string,
-	width: number,
-	height: number,
-	fps: string,
-	bitrate: string
-) => spawn('ffmpeg', [
-	'-f', 'x11grab',
-	'-s', `${width}x${height}`,
-	'-r', fps,
-	'-i', env.DISPLAY,
-	'-an',
+export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string) => spawn('ffmpeg', [
+    '-f', 'x11grab',
+    '-s', `${width}x${height}`,
+    '-r', fps,
+    '-i', env.DISPLAY,
+    '-an',
 
-	'-f', 'mpegts',
-	'-c:v', 'mpeg1video',
-	'-b:v', bitrate,
-	'-bf', '0',
+    '-f', 'rtp',
+    '-c:v', 'libvpx',
+    '-b:v', bitrate,
+    '-crf', '30',
+    '-speed', '1',
+    '-quality', 'realtime',
+    '-slices', '3',
+    '-threads', '3',
 
-	`${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
+    `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
+], {
+    env,
+    stdio: [
+        'ignore',
+        'inherit',
+        'inherit'
+    ]
+})
+
+export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string, streamingIp) => spawn('gst-launch-1.0', [
+    '-v',
+    'ximagesrc', 'use-damage=0', 
+    '!', 'videoconvert', 
+    '!', `video/x-raw,width=${width},height=${height},framerate=${fps}/1`, 
+    `!`, 'vp8enc', 
+        'cpu-used=8',
+        'error-resilient=1', 
+        `target-bitrate=${bitrate}`, 
+        'deadline=50000',
+	'threads=2',
+        'token-partitions=2',	
+    '!', 'rtpvp8pay', 
+    '!','udpsink', 
+        `host=${streamingIp}`,
+        `port=${port}`
+], {
+    env,
+    stdio: [
+        'ignore',
+        'inherit',
+        'inherit'
+    ]
+})
+
+export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string, streamingIp: string) => spawn('gst-launch-1.0', [
+    "-v", "pulsesrc", 
+    "!", "audioresample", 
+    "!", "audio/x-raw,channels=2,rate=24000", 
+    "!", `opusenc`, 
+        `bitrate=${bitrate}`,
+    `!`, "rtpopuspay", 
+    "!", "udpsink",
+        `host=${streamingIp}`,
+        `port=${port}`
 ], {
 	env,
 	stdio: [
@@ -98,18 +138,21 @@ export const ffmpeg = (
 	]
 })
 
-export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
-	'-f', 'pulse',
-	'-ac', '2',
-	'-ar', '44100',
-	'-i', 'default',
-	'-vn',
+export const ffmpegaudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string) => spawn('ffmpeg', [
+    '-f', 'pulse',
+    '-ac', '2',
+    '-ar', '36000',
+    '-i', 'default',
+    '-vn',
 
-	'-f', 'mpegts',
-	'-c:a', 'mp2',
-	'-b:a', bitrate,
+    '-f', 'rtp',
+    '-c:a', 'libopus',
+    '-b:a', bitrate,
+    '-compression_level', '10',
+    '-frame_duration', '20',
+    '-application', 'lowdelay',
 
-	`${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
+    `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
 ], {
 	env,
 	stdio: [
