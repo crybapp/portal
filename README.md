@@ -2,13 +2,14 @@
 
 _**Portal** - VM instance_
 
-[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal)](https://github.com/crybapp/portal/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/portal)](https://github.com/crybapp/portal/blob/master/LICENSE) [![PayPal Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/williamsthing)
+[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal)](https://github.com/crybapp/portal/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/portal)](https://github.com/crybapp/portal/blob/master/LICENSE) [![Patreon Donate](https://img.shields.io/badge/donate-Patreon-red.svg)](https://patreon.com/cryb)
 
 ## Docs
 * [Info](#info)
     * [Status](#status)
 * [Codebase](#codebase)
     * [Folder Structure](#folder-structure)
+		* [Code Style](#code-style)
     * [First time setup](#first-time-setup)
         * [Installation](#installation)
     * [Running the app locally](#running-the-app-locally)
@@ -26,6 +27,13 @@ _**Portal** - VM instance_
 
 ## Codebase
 The codebase for `@cryb/portal` is written in JavaScript, utilising TypeScript and Node.js.
+
+### Code Style
+We ask that you follow our [code style guidelines](https://github.com/crybapp/library/blob/master/code-style/STYLE.md) when contributing to this repository.
+
+We use TSLint in order to lint our code. Run `yarn lint` before committing any code to ensure it's clean.
+
+*Note: while we have most rules covered in our `tslint.json` config, it's good practice to familarise yourself with our code style guidelines*
 
 ### Folder Structure
 ```
