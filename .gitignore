@@ -92,3 +92,7 @@ dist
 
 # macOS specific files
 .DS_Store
+
+# Package Manager Files
+yarn.lock
+package-lock.json
