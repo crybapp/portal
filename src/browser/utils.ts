@@ -55,7 +55,7 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
 	if (process.env.IS_CHROMIUM_DARK_MODE === 'false')
 		config.splice(config.indexOf('-force-dark-mode'), 1)
 
-    return spawn('google-chrome', [
+    return spawn('chromium', [
         ...config,
         startupUrl
     ], {
