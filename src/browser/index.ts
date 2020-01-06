@@ -1,5 +1,5 @@
 import { convertKeyCode } from '../utils/keyboard.utils'
-import { xvfb, pulseaudio, openbox, chromium, ffmpeg, ffmpegaudio, xdotool, gstreamer, gstreameraudio } from './utils'
+import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio } from './utils'
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
 
@@ -13,6 +13,7 @@ export default class VirtualBrowser {
     audioPort: number
     startupUrl: string
     streamingIp: string
+    janusEnabled: boolean
     bitDepth: number
     env: NodeJS.ProcessEnv
 
@@ -56,30 +57,57 @@ export default class VirtualBrowser {
         }
     })
 
-    setupFfmpeg = () => {
-        gstreamer(
-            this.env, 
-            this.videoPort,
-            this.width, 
-            this.height, 
-            this.videoFps, 
-            this.videoBitrate,
-            this.streamingIp
-        ).on('close', () => {
-            console.log('ffmpeg has suddenly stopped - attempting a restart')
-            setTimeout(this.setupFfmpeg, 1000)
-        })
+    setupVideo = () => {
+        if(this.janusEnabled) {
+            janusVideo(
+                this.env, 
+                this.videoPort,
+                this.width, 
+                this.height, 
+                this.videoFps, 
+                this.videoBitrate,
+                this.streamingIp
+            ).on('close', () => {
+                console.log('ffmpeg has suddenly stopped - attempting a restart')
+                setTimeout(this.setupVideo, 1000)
+            })
+        } else {
+            apertureVideo (
+                this.env, 
+                signToken({id: fetchPortalId()}, this.env.STREAMING_KEY || this.env.APERTURE_KEY),
+                this.width, 
+                this.height, 
+                this.videoFps, 
+                this.videoBitrate
+            ).on('close', () => {
+				console.log('ffmpeg has suddenly stopped - attempting a restart')
+				setTimeout(this.setupVideo, 1000)
+			})
+        }
+
     }
-    setupFfmpegAudio = () => {
-        gstreameraudio(
-            this.env, 
-            this.audioPort,
-            this.audioBitrate,
-            this.streamingIp,
-        ).on('close', () => {
-            console.log('ffmpeg audio has suddenly stopped - attempting a restart')
-            setTimeout(this.setupFfmpegAudio, 1000)
-        })
+    
+    setupAudio = () => {
+        if(this.janusEnabled) {
+            janusAudio(
+                this.env, 
+                this.audioPort,
+                this.audioBitrate,
+                this.streamingIp,
+            ).on('close', () => {
+                console.log('ffmpeg audio has suddenly stopped - attempting a restart')
+                setTimeout(this.setupAudio, 1000)
+            })
+        } else {
+            apertureAudio(
+                this.env, 
+                signToken({ id: fetchPortalId() }, this.env.STREAMING_KEY || this.env.APERTURE_KEY),
+			    this.audioBitrate
+            ).on('close', () => {
+				console.log('ffmpeg audio has suddenly stopped - attempting a restart')
+				setTimeout(this.setupAudio, 1000)
+			})
+        }
     }
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),

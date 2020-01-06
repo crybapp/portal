@@ -65,33 +65,31 @@ export default class WRTCClient {
                 return
 
             this.browser.audioPort = d.audioport
-            this.browser.videoPort = d.videoport
+			this.browser.videoPort = d.videoport
+			this.browser.janusEnabled = true
             
             if(d.janusAddress == "localhost") {
                 this.browser.streamingIp = "host.docker.internal"
             } else  {
                 this.browser.streamingIp = d.janusAddress
-            }
+			}
 
             this.setupBrowser()
         }
 
         if(op === 20) {
-            if(!d.apertureAddress)
-                return
-
-            this.browser.streamingIp = d.apertureAddress
             this.browser.videoPort = d.aperturePort
-            this.browser.audioPort = d.aperturePort
+			this.browser.audioPort = d.aperturePort
+			this.browser.janusEnabled = false
 
             this.setupBrowser()
         }
     }
 
     setupBrowser = () => {
-        this.browser.setupFfmpeg()
+        this.browser.setupVideo()
         if (process.env.AUDIO_ENABLED !== 'false')
-            this.browser.setupFfmpegAudio()
+            this.browser.setupAudio()
     }
 
 	public send = (object: IWSEvent) => this.websocket.send(JSON.stringify(object))

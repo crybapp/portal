@@ -68,33 +68,7 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
     })
 }
 
-export const ffmpeg = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string) => spawn('ffmpeg', [
-    '-f', 'x11grab',
-    '-s', `${width}x${height}`,
-    '-r', fps,
-    '-i', env.DISPLAY,
-    '-an',
-
-    '-f', 'rtp',
-    '-c:v', 'libvpx',
-    '-b:v', bitrate,
-    '-crf', '30',
-    '-speed', '1',
-    '-quality', 'realtime',
-    '-slices', '3',
-    '-threads', '3',
-
-    `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
-], {
-    env,
-    stdio: [
-        'ignore',
-        'inherit',
-        'inherit'
-    ]
-})
-
-export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string, streamingIp) => spawn('gst-launch-1.0', [
+export const janusVideo = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string, streamingIp) => spawn('gst-launch-1.0', [
     '-v',
     'ximagesrc', 'use-damage=0', 
     '!', 'videoconvert', 
@@ -119,7 +93,7 @@ export const gstreamer = (env: NodeJS.ProcessEnv, port: number, width: number, h
     ]
 })
 
-export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string, streamingIp: string) => spawn('gst-launch-1.0', [
+export const janusAudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string, streamingIp: string) => spawn('gst-launch-1.0', [
     "-v", "pulsesrc", 
     "!", "audioresample", 
     "!", "audio/x-raw,channels=2,rate=24000", 
@@ -138,21 +112,47 @@ export const gstreameraudio = (env: NodeJS.ProcessEnv, port: number, bitrate: st
 	]
 })
 
-export const ffmpegaudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string) => spawn('ffmpeg', [
-    '-f', 'pulse',
-    '-ac', '2',
-    '-ar', '36000',
-    '-i', 'default',
-    '-vn',
+export const apertureVideo = (
+	env: NodeJS.ProcessEnv,
+	token: string,
+	width: number,
+	height: number,
+	fps: string,
+	bitrate: string
+) => spawn('ffmpeg', [
+	'-f', 'x11grab',
+	'-s', `${width}x${height}`,
+	'-r', fps,
+	'-i', env.DISPLAY,
+	'-an',
 
-    '-f', 'rtp',
-    '-c:a', 'libopus',
-    '-b:a', bitrate,
-    '-compression_level', '10',
-    '-frame_duration', '20',
-    '-application', 'lowdelay',
+	'-f', 'mpegts',
+	'-c:v', 'mpeg1video',
+	'-b:v', bitrate,
+	'-bf', '0',
 
-    `rtp://${env.STREAMING_URL || env.APERTURE_URL}:${port}?pkt_size=1300` //pkt_size to 1300 to allow padding for webRTC overhead.
+	`${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
+], {
+	env,
+	stdio: [
+		'ignore',
+		'inherit',
+		'inherit'
+	]
+})
+
+export const apertureAudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
+	'-f', 'pulse',
+	'-ac', '2',
+	'-ar', '44100',
+	'-i', 'default',
+	'-vn',
+
+	'-f', 'mpegts',
+	'-c:a', 'mp2',
+	'-b:a', bitrate,
+
+	`${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
 ], {
 	env,
 	stdio: [
