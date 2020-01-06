@@ -60,21 +60,16 @@ export default class WRTCClient {
             if(CONTROLLER_EVENT_TYPES.indexOf(t) > -1)
                 this.browser.handleControllerEvent(d, t)
 
-        if(op === 10) {
-            if(!d.audioport || !d.videoport || !d.janusAddress)
-                return
+   	if(op === 10) {
+           	if(!d.audioport || !d.videoport || !d.janusAddress)
+                	return
 
-            this.browser.audioPort = d.audioport
-			this.browser.videoPort = d.videoport
-			this.browser.janusEnabled = true
-            
-            if(d.janusAddress == "localhost") {
-                this.browser.streamingIp = "host.docker.internal"
-            } else  {
-                this.browser.streamingIp = d.janusAddress
-			}
+		this.browser.audioPort = d.audioport
+		this.browser.videoPort = d.videoport
+		this.browser.janusEnabled = true
+            	this.browser.streamingIp = process.env.STREAMING_URL
 
-            this.setupBrowser()
+        	this.setupBrowser()
         }
 
         if(op === 20) {
