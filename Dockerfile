@@ -55,12 +55,13 @@ RUN apt-get update && apt-get -y dist-upgrade && \
 # Install Widevine component for Chromium
 RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/versions.txt | tail -n 1) && \
     wget "https://dl.google.com/widevine-cdm/$WIDEVINE_VERSION-linux-x64.zip" -O /tmp/widevine.zip && \
-    unzip -p /tmp/widevine.zip libwidevinecdm.so > /usr/lib/chromium/libwidevinecdm.so && \
-    chmod 644 /usr/lib/chromium/libwidevinecdm.so && \
+    mkdir /usr/lib/chromium/WidevineCdm && \
+    mkdir /usr/lib/chromium/WidevineCdm/_platform_specific && \
+    mkdir /usr/lib/chromium/WidevineCdm/_platform_specific/linux_x64 && \
+    unzip -p /tmp/widevine.zip manifest.json > /usr/lib/chromium/WidevineCdm/manifest.json && \
+    unzip -p /tmp/widevine.zip LICENSE.txt > /usr/lib/chromium/WidevineCdm/LICENSE.txt && \
+    unzip -p /tmp/widevine.zip libwidevinecdm.so > /usr/lib/chromium/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so && \
     rm /tmp/widevine.zip
-
-#RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-#    sudo dpkg -i google-chrome-stable_current_amd64.deb
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home \
