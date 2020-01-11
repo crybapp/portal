@@ -49,13 +49,17 @@ RUN apt-get update && apt-get -y dist-upgrade && \
         libappindicator3-1 \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
     && mkdir -p /var/run/dbus \
-    && mkdir -p /etc/chromium/policies/managed \
+    && mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
-
+    
 # Install Widevine component for Chromium
 RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/versions.txt | tail -n 1) \
     && wget "https://dl.google.com/widevine-cdm/$WIDEVINE_VERSION-linux-x64.zip" -O /tmp/widevine.zip \
-    && unzip /tmp/widevine.zip -d /usr/lib/chromium/WidevineCdm \
+    && mkdir -p /tmp/WidevineCdm/_platform_specific/linux_x64 \
+    && unzip -p /tmp/widevine.zip manifest.json > /tmp/WidevineCdm/manifest.json \
+    && unzip -p /tmp/widevine.zip LICENSE.txt > /tmp/WidevineCdm/LICENSE.txt \
+    && unzip -p /tmp/widevine.zip libwidevinecdm.so > /tmp/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so \
+    && mv /tmp/WidevineCdm /usr/lib/chromium/WidevineCdm \
     && rm /tmp/widevine.zip
 
 # Add normal user
@@ -66,7 +70,7 @@ RUN useradd glados --shell /bin/bash --create-home \
 WORKDIR /home/glados/.internal
 COPY . .
 
-# Chromium Policies and Preferences
+# Chromium Policies & Preferences
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 COPY ./configs/master_preferences.json /etc/chromium/master_preferences
 # Pulseaudio Configuration
