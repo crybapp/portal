@@ -50,7 +50,6 @@ RUN apt-get update && apt-get -y dist-upgrade && \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
     && mkdir -p /var/run/dbus \
     && mkdir -p /etc/chromium/policies/managed \
-    && mkdir -p /etc/opt/chrome/policies/managed \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
 
 # Install Widevine component for Chromium
@@ -61,10 +60,7 @@ RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/vers
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home \
-    && usermod -a -G audio glados \ 
-    && mkdir -p /home/glados/.config/google-chrome \
-    && chown -R glados:glados /home/glados/.config/google-chrome \
-    && touch "/home/glados/.config/google-chrome/First Run"
+    && usermod -a -G audio glados
 
 # Copy information
 WORKDIR /home/glados/.internal
@@ -73,9 +69,6 @@ COPY . .
 # Chromium Policies and Preferences
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 COPY ./configs/master_preferences.json /etc/chromium/master_preferences
-# Chrome Policies and Preferences
-COPY ./configs/managed_policies.json /etc/opt/chrome/policies/managed/policies.json
-COPY ./configs/master_preferences.json /etc/opt/chrome/master_preferences
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 # Openbox Configuration
