@@ -62,7 +62,7 @@ RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/vers
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home \
     && usermod -a -G audio glados \ 
-    && mkdir -r /home/glados/.config/google-chrome \
+    && mkdir -p /home/glados/.config/google-chrome \
     && chown -R glados:glados /home/glados/.config/google-chrome \
     && touch "/home/glados/.config/google-chrome/First Run"
 
