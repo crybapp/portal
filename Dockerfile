@@ -55,7 +55,10 @@ RUN apt-get update && apt-get -y dist-upgrade && \
 # Install Widevine component for Chromium
 RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/versions.txt | tail -n 1) \
     && wget "https://dl.google.com/widevine-cdm/$WIDEVINE_VERSION-linux-x64.zip" -O /tmp/widevine.zip \
-    && unzip /tmp/widevine.zip -d /usr/lib/chromium/WidevineCdm \
+    && unzip /tmp/widevine.zip -d /tmp/WidevineCdm \
+    && mkdir -p /tmp/WidevineCdm/_platform_specific/linux_x64 \
+    && mv /tmp/WidevineCdm/libwidevinecdm.so /tmp/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so \
+    && mv /tmp/WidevineCdm /usr/lib/chromium/WidevineCdm \
     && rm /tmp/widevine.zip
 
 # Add normal user
