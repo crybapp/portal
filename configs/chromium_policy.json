@@ -7,12 +7,20 @@
         "chrome://policy"
     ],
     "ExtensionInstallWhitelist": [
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm",
+        "gcbommkclmclpchllfjekcdonpmejbdp"
     ],
     "ExtensionInstallBlacklist": [
         "*"
     ],
     "ExtensionInstallForcelist": [
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-    ]
+        "cjpalhdlnbpafiamejdnhcphjbkeiagm",
+        "gcbommkclmclpchllfjekcdonpmejbdp"
+    ],
+
+    "AutofillAddressEnabled": false,
+    "AutofillCreditCardEnabled": false,
+    "BrowserAddPersonEnabled": false,
+    "BrowserSignin": 0,
+    "PasswordManagerEnabled": false
 }
