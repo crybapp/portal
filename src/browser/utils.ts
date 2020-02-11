@@ -37,18 +37,17 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', ['--config-f
 })
 
 export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, startupUrl) => {
-	const config = [
-		'-bwsi',
-		'-test-type',
-		'-no-sandbox',
-		'-disable-gpu',
-		'-start-maximized',
-		'-force-dark-mode',
-		'-disable-file-system',
-		'-disable-software-rasterizer',
-
-		'--window-position=0,0',
-		`--window-size=${width},${height}`,
+    const config = [
+        '-bwsi',
+        '-test-type',
+        '-no-sandbox',
+        '-disable-gpu',
+        '-start-maximized',
+        '-force-dark-mode',
+        '-disable-file-system',
+        '-disable-software-rasterizer',
+        '--window-position=0,0',
+        `--window-size=${width},${height}`,
 
 		`--display=${env.DISPLAY}`
 	]
@@ -56,20 +55,64 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
 	if (process.env.IS_CHROMIUM_DARK_MODE === 'false')
 		config.splice(config.indexOf('-force-dark-mode'), 1)
 
-	return spawn('chromium', [
-		...config,
-		startupUrl
-	], {
-		env,
-		stdio: [
-			'ignore',
-			'inherit',
-			'inherit'
-		]
-	})
+    return spawn('chromium', [
+        ...config,
+        startupUrl
+    ], {
+        env,
+        stdio: [
+            'ignore',
+            'inherit',
+            'inherit'
+        ]
+    })
 }
 
-export const ffmpeg = (
+export const janusVideo = (env: NodeJS.ProcessEnv, port: number, width: number, height: number, fps: string, bitrate: string, streamingIp) => spawn('gst-launch-1.0', [
+    '-v',
+    'ximagesrc', 'use-damage=0', 
+    '!', 'videoconvert', 
+    '!', `video/x-raw,width=${width},height=${height},framerate=${fps}/1`, 
+    `!`, 'vp8enc', 
+        'cpu-used=8',
+        'error-resilient=1', 
+        `target-bitrate=${bitrate}`, 
+        'deadline=50000',
+	'threads=2',
+        'token-partitions=2',	
+    '!', 'rtpvp8pay', 
+    '!','udpsink', 
+        `host=${streamingIp}`,
+        `port=${port}`
+], {
+    env,
+    stdio: [
+        'ignore',
+        'inherit',
+        'inherit'
+    ]
+})
+
+export const janusAudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string, streamingIp: string) => spawn('gst-launch-1.0', [
+    "-v", "pulsesrc", 
+    "!", "audioresample", 
+    "!", "audio/x-raw,channels=2,rate=24000", 
+    "!", `opusenc`, 
+        `bitrate=${bitrate}`,
+    `!`, "rtpopuspay", 
+    "!", "udpsink",
+        `host=${streamingIp}`,
+        `port=${port}`
+], {
+	env,
+	stdio: [
+		'ignore',
+		'inherit',
+		'inherit'
+	]
+})
+
+export const apertureVideo = (
 	env: NodeJS.ProcessEnv,
 	token: string,
 	width: number,
@@ -98,7 +141,7 @@ export const ffmpeg = (
 	]
 })
 
-export const ffmpegaudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
+export const apertureAudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) => spawn('ffmpeg', [
 	'-f', 'pulse',
 	'-ac', '2',
 	'-ar', '44100',

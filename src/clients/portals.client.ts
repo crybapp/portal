@@ -56,11 +56,36 @@ export default class WRTCClient {
 
 	public handleMessage = (message: IWSEvent) => {
 		const { op, d, t } = message
+        if(op === 0)
+            if(CONTROLLER_EVENT_TYPES.indexOf(t) > -1)
+                this.browser.handleControllerEvent(d, t)
 
-		if (op === 0)
-			if (CONTROLLER_EVENT_TYPES.indexOf(t) > -1)
-				this.browser.handleControllerEvent(d, t)
-	}
+   	if(op === 10) {
+           	if(!d.audioport || !d.videoport || !d.janusAddress)
+                	return
+
+		this.browser.audioPort = d.audioport
+		this.browser.videoPort = d.videoport
+		this.browser.janusEnabled = true
+            	this.browser.streamingIp = process.env.STREAMING_URL
+
+        	this.setupBrowser()
+        }
+
+        if(op === 20) {
+            this.browser.videoPort = d.aperturePort
+			this.browser.audioPort = d.aperturePort
+			this.browser.janusEnabled = false
+
+            this.setupBrowser()
+        }
+    }
+
+    setupBrowser = () => {
+        this.browser.setupVideo()
+        if (process.env.AUDIO_ENABLED !== 'false')
+            this.browser.setupAudio()
+    }
 
 	public send = (object: IWSEvent) => this.websocket.send(JSON.stringify(object))
 }
