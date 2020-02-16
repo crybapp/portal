@@ -9,121 +9,98 @@ interface ConvertKeyCodeConfig {
     shift: boolean
 }
 
-const mappings = {
-    32: 'space',
-    13: 'Return',
-    8: 'BackSpace',
-    38: 'Up',
-    40: 'Down',
-    37: 'Left',
-    39: 'Right'
-}
+export const convertKeyCode = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) => {
+    let char = code
 
-export const convertKeyCode = (code: number, { ctrl, shift }: ConvertKeyCodeConfig) => {
-    let char = String.fromCharCode(code)
-
-    if(!shift)
-        char = char.toLowerCase()
-
-    if(code == 32)
+    if(code === " ")
         char = 'space'
-    else if(code == 13)
+    else if(code === "Enter")
         char = 'Return'
-    else if(code == 8)
+    else if(code === "Backspace")
         char = 'BackSpace'
-    else if(code == 38)
+    else if(code === "ArrowUp")
         char = 'Up'
-    else if(code == 40)
+    else if(code === "ArrowDown")
         char = 'Down'
-    else if(code == 37)
+    else if(code === "ArrowLeft")
         char = 'Left'
-    else if(code == 39)
+    else if(code === "ArrowRight")
         char = 'Right'
-    else if(code == 190)
-        if(shift)
-            char = 'greater'
-        else
-            char = 'period'
-    else if(code == 188)
-        if(shift)
-            char = 'less'
-        else
-            char = 'comma'
-    else if(code == 186)
-        if(shift)
-            char = 'colon'
-        else
-            char = 'semicolon'
-    else if(code == 222)
-        if(shift)
-            char = 'quotedbl'
-        else
-            char = 'apostrophe'
-    else if(code == 191)
-        if(shift)
-            char = 'question'
-        else
-            char = 'slash'
-    else if(code == 13)
-        char = 'Return'
-    else if(code == 189)
-        if(shift)
-            char = 'underscore'
-        else
-            char = 'minus'
-    else if(code == 187)
-        if(shift)
-            char = 'plus'
-        else
-            char = 'equal'
-    else if(code == 219)
-        if(shift)
-            char = 'braceleft'
-        else
-            char = 'bracketleft'
-    else if(code == 221)
-        if(shift)
-            char = 'braceright'
-        else
-            char = 'bracketright'
-    else if(code == 220)
-        if(shift)
-            char = 'bar'
-        else
-            char = 'backslash'
-
-    if(shift)
-        if(char == '1')
-            char = 'exclam'
-        else if(char == '2')
-            char = 'at'
-        else if(char == '3')
-            char = 'numbersign'
-        else if(char == '4')
-            char = 'dollar'
-        else if(char == '5')
-            char = 'percent'
-        else if(char == '6')
-            char = 'upcaret'
-        else if(char == '7')
-            char = 'ampersand'
-        else if(char == '8')
-            char = 'asterisk'
-        else if(char == '9')
-            char = 'parenleft'
-        else if(char == '0')
-            char = 'parenright'
+    else if(code === ".")
+        char = 'period'
+    else if(code === ">")
+        char = 'greater'
+    else if(code === "<")
+        char = 'less'
+    else if(code === ",")
+        char = 'comma'
+    else if(code === ":")
+        char = 'colon'
+    else if(code === ";")
+        char = 'semicolon'
+    else if(code === "\"")
+        char = 'quotedbl'
+    else if(code === "\'")
+        char = 'apostrophe'
+    else if(code === "?")
+        char = 'question'
+    else if(code === "/")
+        char = 'slash'
+    else if(code === "_")
+        char = 'underscore'
+    else if(code === "-")
+        char = 'minus'
+    else if(code === "+")
+        char = 'plus'
+    else if(code === "=")
+        char = 'equal'
+    else if(code === "[")
+        char = 'braceleft'
+    else if(code === "{")
+        char = 'bracketleft'
+    else if(code === "]")
+        char = 'braceright'
+    else if(code === "}")
+        char = 'bracketright'
+    else if(code === "|")
+        char = 'bar'
+    else if(code === "\\")
+        char = 'backslash'
+    else if(code === "!")
+        char = 'exclam'
+    else if(code === "@")
+        char = 'at'
+    else if(code === "#")
+        char = 'numbersign'
+    else if(code === "$")
+        char = 'dollar'
+    else if(code === "%")
+        char = 'percent'
+    else if(code === "^")
+        char = 'upcaret'
+    else if(code === "&")
+        char = 'ampersand'
+    else if(code === "*")
+        char = 'asterisk'
+    else if(code === "(")
+        char = 'parenleft'
+    else if(code === ")")
+        char = 'parenright'
+    else if(code === "`")
+        char = 'grave'
+    else if(code === "~")
+        char = 'asciitilde'
 
     if(ctrl)
-        if(char == 'c')
+        if(char === 'c')
             char = 'ctrl+c'
-        else if(char == 'x')
+        else if(char === 'x')
             char = 'ctrl+x'
-        else if(char == 'v')
+        else if(char === 'v')
             char = 'ctrl+v'
-        else if(char == 'a')
+        else if(char === 'a')
             char = 'ctrl+a'
-        else if(char == 'f')
+        else if(char === 'f')
             char = 'ctrl+f'
         
 

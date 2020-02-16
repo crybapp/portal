@@ -127,9 +127,9 @@ export default class VirtualBrowser {
 
         if(typeHeader === 'KEY') {
             const pressType = type.split('_')[1].toLowerCase(),
-                { keyCode, ctrlKey: ctrl, shiftKey: shift } = data
-
-            return `key${pressType} --clearmodifiers '${convertKeyCode(keyCode, { ctrl, shift })}'`
+                { key, ctrlKey: ctrl, shiftKey: shift } = data
+                
+            return `key${pressType} --clearmodifiers '${convertKeyCode(key, { ctrl, shift })}'`
         } else if(type === 'PASTE_TEXT') {
             const { text } = data as { text: string }
             
