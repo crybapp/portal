@@ -96,3 +96,4 @@ dist
 # Package Manager Files
 yarn.lock
 package-lock.json
+.pnp.js
