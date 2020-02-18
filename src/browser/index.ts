@@ -1,4 +1,4 @@
-import { convertKeyCode, convertKey } from '../utils/keyboard.utils'
+import { convertKey } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio } from './utils'
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
