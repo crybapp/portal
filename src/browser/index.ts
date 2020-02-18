@@ -1,4 +1,4 @@
-import { convertKeyCode } from '../utils/keyboard.utils'
+import { convertKeyCode, convertKey } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio } from './utils'
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
@@ -129,7 +129,7 @@ export default class VirtualBrowser {
             const pressType = type.split('_')[1].toLowerCase(),
                 { key, ctrlKey: ctrl, shiftKey: shift } = data
                 
-            return `key${pressType} --clearmodifiers '${convertKeyCode(key, { ctrl, shift })}'`
+            return `key${pressType} --clearmodifiers '${convertKey(key, { ctrl, shift })}`
         } else if(type === 'PASTE_TEXT') {
             const { text } = data as { text: string }
             

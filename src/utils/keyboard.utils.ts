@@ -9,100 +9,65 @@ interface ConvertKeyCodeConfig {
     shift: boolean
 }
 
-export const convertKeyCode = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) => {
+export const convertKey = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) => {
     let char = code
-
-    if(code === " ")
-        char = 'space'
-    else if(code === "Enter")
-        char = 'Return'
-    else if(code === "Backspace")
-        char = 'BackSpace'
-    else if(code === "ArrowUp")
-        char = 'Up'
-    else if(code === "ArrowDown")
-        char = 'Down'
-    else if(code === "ArrowLeft")
-        char = 'Left'
-    else if(code === "ArrowRight")
-        char = 'Right'
-    else if(code === ".")
-        char = 'period'
-    else if(code === ">")
-        char = 'greater'
-    else if(code === "<")
-        char = 'less'
-    else if(code === ",")
-        char = 'comma'
-    else if(code === ":")
-        char = 'colon'
-    else if(code === ";")
-        char = 'semicolon'
-    else if(code === "\"")
-        char = 'quotedbl'
-    else if(code === "\'")
-        char = 'apostrophe'
-    else if(code === "?")
-        char = 'question'
-    else if(code === "/")
-        char = 'slash'
-    else if(code === "_")
-        char = 'underscore'
-    else if(code === "-")
-        char = 'minus'
-    else if(code === "+")
-        char = 'plus'
-    else if(code === "=")
-        char = 'equal'
-    else if(code === "[")
-        char = 'braceleft'
-    else if(code === "{")
-        char = 'bracketleft'
-    else if(code === "]")
-        char = 'braceright'
-    else if(code === "}")
-        char = 'bracketright'
-    else if(code === "|")
-        char = 'bar'
-    else if(code === "\\")
-        char = 'backslash'
-    else if(code === "!")
-        char = 'exclam'
-    else if(code === "@")
-        char = 'at'
-    else if(code === "#")
-        char = 'numbersign'
-    else if(code === "$")
-        char = 'dollar'
-    else if(code === "%")
-        char = 'percent'
-    else if(code === "^")
-        char = 'upcaret'
-    else if(code === "&")
-        char = 'ampersand'
-    else if(code === "*")
-        char = 'asterisk'
-    else if(code === "(")
-        char = 'parenleft'
-    else if(code === ")")
-        char = 'parenright'
-    else if(code === "`")
-        char = 'grave'
-    else if(code === "~")
-        char = 'asciitilde'
+    let uCode = 'U00' + code.codePointAt(0).toString(16)
 
     if(ctrl)
-        if(char === 'c')
-            char = 'ctrl+c'
-        else if(char === 'x')
-            char = 'ctrl+x'
-        else if(char === 'v')
-            char = 'ctrl+v'
-        else if(char === 'a')
-            char = 'ctrl+a'
-        else if(char === 'f')
-            char = 'ctrl+f'
-        
+        switch(code) {
+            case "c":
+                return 'ctrl+c'
+            case "v":
+                return 'ctrl+v'
+            case "a":
+                return 'ctrl+a'
+            case "f":
+                return 'ctrl+f'
+        }
+
+    switch (code) {
+        case " ":
+            char = 'space'
+            break
+        case "Enter":
+            char = 'Return'
+            break
+        case "Backspace":
+            char = 'BackSpace'
+            break
+        case "ArrowUp":
+            char = 'Up'
+            break
+        case "ArrowDown":
+            char = 'Down'
+            break
+        case "ArrowLeft":
+            char = 'Left'
+            break
+        case "ArrowRight":
+            char = 'Right'
+            break
+        case "Shift":
+            char = 'Shift_L'
+            break
+        case "Meta":
+            char = 'Meta_L'
+            break
+        case "Alt":
+            char = 'Alt_L'
+            break
+        case "Tab":
+            char = 'Tab'
+            break
+        case "Control":
+            char = 'Control_L'
+            break
+        case "Dead":
+            char = 'dead_grave'
+            break
+        default:
+            char = uCode
+    }
 
     return char
 }
