@@ -6,6 +6,9 @@ if ! pgrep dbus-daemon > /dev/null; then
     dbus-daemon --fork --config-file=/usr/share/dbus-1/system.conf
 fi
 
+# Add Tor for Brave Nullroute
+echo "0.0.0.0 tor.bravesoftware.com" >> /etc/hosts
+
 # Check if user exists
 if id -u glados > /dev/null 2>&1; then
     echo "Starting portal in glados user..."

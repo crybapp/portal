@@ -1,7 +1,9 @@
 FROM node:lts-buster
 
-# Install Chromium, audio and other misc packages, cleanup, create Chromium policies folders, workarounds
-RUN apt-get update && apt-get -y dist-upgrade && \
+# Install Brave, audio and other misc packages, cleanup, create Brave policies folders, workarounds
+RUN curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc | apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add - \
+    && echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main" | tee /etc/apt/sources.list.d/brave-browser-release.list \
+    && apt-get update && apt-get -y dist-upgrade && \
     apt-get --no-install-recommends -y install \
         dbus \
         dbus-x11 \
@@ -39,7 +41,7 @@ RUN apt-get update && apt-get -y dist-upgrade && \
         gstreamer1.0-qt5 \
         gstreamer1.0-pulseaudio \
         ffmpeg \
-        chromium \
+        brave-browser \
         sudo \
         grep \
         procps \
@@ -52,15 +54,6 @@ RUN apt-get update && apt-get -y dist-upgrade && \
     && mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
     
-# Install Widevine component for Chromium
-RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/versions.txt | tail -n 1) \
-    && wget "https://dl.google.com/widevine-cdm/$WIDEVINE_VERSION-linux-x64.zip" -O /tmp/widevine.zip \
-    && mkdir -p /tmp/WidevineCdm/_platform_specific/linux_x64 \
-    && unzip -p /tmp/widevine.zip manifest.json > /tmp/WidevineCdm/manifest.json \
-    && unzip -p /tmp/widevine.zip LICENSE.txt > /tmp/WidevineCdm/LICENSE.txt \
-    && unzip -p /tmp/widevine.zip libwidevinecdm.so > /tmp/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so \
-    && mv /tmp/WidevineCdm /usr/lib/chromium/WidevineCdm \
-    && rm /tmp/widevine.zip
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home \
@@ -70,7 +63,7 @@ RUN useradd glados --shell /bin/bash --create-home \
 WORKDIR /home/glados/.internal
 COPY . .
 
-# Chromium Policies & Preferences
+# Brave Policies & Preferences
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 COPY ./configs/master_preferences.json /etc/chromium/master_preferences
 # Pulseaudio Configuration

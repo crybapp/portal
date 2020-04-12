@@ -36,7 +36,7 @@ export const openbox = (env: NodeJS.ProcessEnv) => spawn('openbox', ['--config-f
 	]
 })
 
-export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, startupUrl) => {
+export const brave = (env: NodeJS.ProcessEnv, width: number, height: number, startupUrl) => {
     const config = [
         '-bwsi',
         '-test-type',
@@ -55,9 +55,9 @@ export const chromium = (env: NodeJS.ProcessEnv, width: number, height: number, 
 	if (process.env.IS_CHROMIUM_DARK_MODE === 'false')
 		config.splice(config.indexOf('-force-dark-mode'), 1)
 
-    return spawn('chromium', [
+    return spawn('brave-browser', [
         ...config,
-        startupUrl
+        //startupUrl
     ], {
         env,
         stdio: [
@@ -166,7 +166,7 @@ export const xdotool = (env: NodeJS.ProcessEnv) => spawn('xdotool', ['-'], {
 	env,
 	stdio: [
 		'pipe',
-		'inherit',
+		'pipe',
 		'inherit'
 	]
 })

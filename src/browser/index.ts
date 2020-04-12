@@ -1,7 +1,10 @@
 import { convertKey } from '../utils/keyboard.utils'
-import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio } from './utils'
+import { xvfb, pulseaudio, openbox, brave, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio} from './utils'
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
+import { on } from 'cluster'
+import { start } from 'repl'
+var pExists = require('process-exists')
 
 export default class VirtualBrowser {
     width: number
@@ -44,8 +47,8 @@ export default class VirtualBrowser {
 
             console.log('Setting up openbox...')
             openbox(env)
-            console.log('Setting up chromium...')
-            this.setupChromium()
+            console.log('Setting up Brave...')
+            this.setupBrave()
 
             console.log('Setting up xdotool...')
             const { stdin: xdoin } = xdotool(env)
@@ -112,7 +115,27 @@ export default class VirtualBrowser {
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
     // then stop it after Chromium is closed for a normal shutdown.
-    private setupChromium = () => chromium(this.env, this.width, this.height, this.startupUrl).on('close', this.setupChromium)
+    private setupBrave = () => brave(this.env, this.width, this.height, this.startupUrl).on('close', () => {setTimeout(this.browserCheck, 2000)})
+
+    private browserCheck = async () => {
+
+        let isTrue = await this.processCheck()
+
+        if (isTrue === true) {
+            this.setupBrave()
+        }
+    }
+
+    private async processCheck() {
+        if (await pExists('brave') === true) {
+            console.log('Browser Running. Ignoring Restart Call.')
+        }
+
+        if (await pExists('brave') === false) {
+            console.log('Restarting Browser.')
+            return true
+        }
+    }
 
     handleControllerEvent = (data: any, type: string) => {
         const command = this.fetchCommand(data, type)
