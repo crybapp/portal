@@ -4,7 +4,7 @@ import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
 import { on } from 'cluster'
 import { start } from 'repl'
-var pExists = require('process-exists')
+import processExists from 'process-exists'
 
 export default class VirtualBrowser {
     width: number
@@ -114,26 +114,17 @@ export default class VirtualBrowser {
     }
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
-    // then stop it after Chromium is closed for a normal shutdown.
+    // then stop it after Brave is closed for a normal shutdown.
     private setupBrave = () => brave(this.env, this.width, this.height, this.startupUrl).on('close', () => {setTimeout(this.browserCheck, 2000)})
 
     private browserCheck = async () => {
-
-        let isTrue = await this.processCheck()
-
-        if (isTrue === true) {
-            this.setupBrave()
-        }
-    }
-
-    private async processCheck() {
-        if (await pExists('brave') === true) {
+        if (await processExists('brave') === true) {
             console.log('Browser Running. Ignoring Restart Call.')
         }
 
-        if (await pExists('brave') === false) {
+        if (await processExists('brave') === false) {
             console.log('Restarting Browser.')
-            return true
+            this.setupBrave()
         }
     }
 

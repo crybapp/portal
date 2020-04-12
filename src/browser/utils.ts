@@ -57,7 +57,7 @@ export const brave = (env: NodeJS.ProcessEnv, width: number, height: number, sta
 
     return spawn('brave-browser', [
         ...config,
-        //startupUrl
+        startupUrl
     ], {
         env,
         stdio: [
