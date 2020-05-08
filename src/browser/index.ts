@@ -2,6 +2,8 @@ import { convertKey } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio } from './utils'
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
+import processExists from 'process-exists'
+import { SIGKILL } from 'constants'
 
 export default class VirtualBrowser {
     width: number
@@ -112,7 +114,18 @@ export default class VirtualBrowser {
 
     // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
     // then stop it after Chromium is closed for a normal shutdown.
-    private setupChromium = () => chromium(this.env, this.width, this.height, this.startupUrl).on('close', this.setupChromium)
+    private setupChromium = () => chromium(this.env, this.width, this.height, this.startupUrl).on('close', () => {setTimeout(this.browserCheck, 2000)})
+
+    private browserCheck = async () => {
+        if (await processExists('chromium-browser') === true) {
+            console.log('Browser Running. Ignoring Restart Call.')
+        }
+
+        if (await processExists('chromium-browser') === false) {
+            console.log('Restarting Browser.')
+            this.setupChromium()
+        }
+    }
 
     handleControllerEvent = (data: any, type: string) => {
         const command = this.fetchCommand(data, type)

@@ -55,11 +55,10 @@ RUN apt-get update && apt-get -y dist-upgrade && \
 # Install Widevine component for Chromium
 RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/versions.txt | tail -n 1) \
     && wget "https://dl.google.com/widevine-cdm/$WIDEVINE_VERSION-linux-x64.zip" -O /tmp/widevine.zip \
-    && mkdir -p /tmp/WidevineCdm/_platform_specific/linux_x64 \
-    && unzip -p /tmp/widevine.zip manifest.json > /tmp/WidevineCdm/manifest.json \
-    && unzip -p /tmp/widevine.zip LICENSE.txt > /tmp/WidevineCdm/LICENSE.txt \
-    && unzip -p /tmp/widevine.zip libwidevinecdm.so > /tmp/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so \
-    && mv /tmp/WidevineCdm /usr/lib/chromium/WidevineCdm \
+    && mkdir -p /usr/lib/chromium/WidevineCdm/_platform_specific/linux_x64 \
+    && unzip -p /tmp/widevine.zip manifest.json > /usr/lib/chromium/WidevineCdm/manifest.json \
+    && unzip -p /tmp/widevine.zip LICENSE.txt > /usr/lib/chromium/WidevineCdm/LICENSE.txt \
+    && unzip -p /tmp/widevine.zip libwidevinecdm.so > /usr/lib/chromium/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so \
     && rm /tmp/widevine.zip
 
 # Add normal user
@@ -77,6 +76,10 @@ COPY ./configs/master_preferences.json /etc/chromium/master_preferences
 COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 # Openbox Configuration
 COPY ./configs/openbox_config.xml /var/lib/openbox/openbox_config.xml
+
+# Link Widevine for First Boot start
+RUN mkdir -p /home/glados/.config/chromium/WidevineCdm && echo '{"Path":"/usr/lib/chromium/WidevineCdm"}' > /home/glados/.config/chromium/WidevineCdm/latest-component-updated-widevine-cdm \
+    && chown -R glados /home/glados/.config/chromium
 
 # Install deps, build then cleanup
 RUN yarn && yarn build && yarn cache clean && rm -rf src
