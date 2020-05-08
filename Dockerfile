@@ -79,7 +79,7 @@ COPY ./configs/openbox_config.xml /var/lib/openbox/openbox_config.xml
 
 # Link Widevine for First Boot start
 RUN mkdir -p /home/glados/.config/chromium/WidevineCdm && echo '{"Path":"/usr/lib/chromium/WidevineCdm"}' > /home/glados/.config/chromium/WidevineCdm/latest-component-updated-widevine-cdm \
-    && chown -R glados /home/glados/.config/chromium
+    && chown -R glados /home/glados
 
 # Install deps, build then cleanup
 RUN yarn && yarn build && yarn cache clean && rm -rf src
