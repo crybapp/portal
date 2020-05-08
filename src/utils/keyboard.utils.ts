@@ -10,64 +10,56 @@ interface ConvertKeyCodeConfig {
 }
 
 export const convertKey = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) => {
-    let char = code
+    let char
     let uCode = 'U00' + code.codePointAt(0).toString(16)
 
-    if(ctrl)
-        switch(code) {
-            case "c":
-                return 'ctrl+c'
-            case "v":
-                return 'ctrl+v'
-            case "a":
-                return 'ctrl+a'
-            case "f":
-                return 'ctrl+f'
-        }
-
     switch (code) {
-        case " ":
+        case ' ':
             char = 'space'
             break
-        case "Enter":
+        case 'Enter':
             char = 'Return'
             break
-        case "Backspace":
+        case 'Backspace':
             char = 'BackSpace'
             break
-        case "ArrowUp":
+        case 'ArrowUp':
             char = 'Up'
             break
-        case "ArrowDown":
+        case 'ArrowDown':
             char = 'Down'
             break
-        case "ArrowLeft":
+        case 'ArrowLeft':
             char = 'Left'
             break
-        case "ArrowRight":
+        case 'ArrowRight':
             char = 'Right'
             break
-        case "Shift":
+        case 'Shift':
             char = 'Shift_L'
             break
-        case "Meta":
+        case 'Meta':
             char = 'Meta_L'
             break
-        case "Alt":
+        case 'Alt':
             char = 'Alt_L'
             break
-        case "Tab":
+        case 'Tab':
             char = 'Tab'
             break
-        case "Control":
+        case 'Control':
             char = 'Control_L'
             break
-        case "Dead":
+        case 'Dead':
             char = 'dead_grave'
             break
         default:
             char = uCode
+            break
     }
+
+    if (ctrl && char != 'Control_L')
+        return `ctrl+${char}`
 
     return char
 }
