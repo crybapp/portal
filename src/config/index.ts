@@ -1,5 +1,11 @@
 import 'dotenv/config'
+import fs from 'fs'
 import { verifyEnv } from '../utils/verifications.utils'
+
+if (process.env.NODE_ENV === 'production') {
+	// Security measure: Delete .env file, ignore silently
+	fs.unlink('.env', err => {})
+}
 
 verifyEnv('PORTALS_WS_URL', 'PORTALS_KEY', 'STREAMING_URL', 'STREAMING_KEY')
 
