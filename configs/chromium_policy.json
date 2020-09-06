@@ -1,20 +1,35 @@
 {
-    "AllowFileSelectionDialogs": false,
-    "PromptForDownloadLocation": false,
-    "BookmarkBarEnabled": false,
-    "URLBlacklist": [
-        "file://*",
-        "chrome://policy"
-    ],
-    "ExtensionInstallWhitelist": [
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm",
-        "hnmpcagpplmpfojmgmnngilcnanddlhb"
-    ],
-    "ExtensionInstallBlacklist": [
-        "*"
-    ],
-    "ExtensionInstallForcelist": [
-        "cjpalhdlnbpafiamejdnhcphjbkeiagm",
-        "hnmpcagpplmpfojmgmnngilcnanddlhb"
-    ]
+  "AllowFileSelectionDialogs": false,
+  "ApplicationLocaleValue": "en-US",
+  "AutoFillEnabled": false,
+  "AutofillAddressEnabled": false,
+  "AutofillCreditCardEnabled": false,
+  "AutoplayAllowed": true,
+  "BookmarkBarEnabled": false,
+  "BrowserAddPersonEnabled": false,
+  "BrowserGuestModeEnabled": false,
+  "BrowserSignin": 0,
+  "DownloadRestrictions": 3,
+  "EditBookmarksEnabled": false,
+  "EnableSyncConsent": false,
+  "ExtensionInstallBlacklist": [
+    "*"
+  ],
+  "ExtensionInstallForcelist": [
+    "cjpalhdlnbpafiamejdnhcphjbkeiagm",
+    "hnmpcagpplmpfojmgmnngilcnanddlhb"
+  ],
+  "ExtensionInstallWhitelist": [
+    "cjpalhdlnbpafiamejdnhcphjbkeiagm",
+    "hnmpcagpplmpfojmgmnngilcnanddlhb"
+  ],
+  "FullscreenAllowed": true,
+  "PasswordManagerEnabled": false,
+  "PrintingEnabled": false,
+  "PromptForDownloadLocation": false,
+  "SyncDisabled": true,
+  "URLBlacklist": [
+    "chrome://policy",
+    "file://*"
+  ]
 }
