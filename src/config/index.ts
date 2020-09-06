@@ -1,6 +1,4 @@
-import dotenv from 'dotenv'
-dotenv.config()
-
+import 'dotenv/config'
 import { verifyEnv } from '../utils/verifications.utils'
 
 verifyEnv('PORTALS_WS_URL', 'PORTALS_KEY', 'STREAMING_URL', 'STREAMING_KEY')

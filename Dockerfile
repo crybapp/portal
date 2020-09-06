@@ -49,17 +49,8 @@ RUN apt-get update && apt-get -y dist-upgrade && \
         libappindicator3-1 \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
     && mkdir -p /var/run/dbus \
-    && mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended \
+    && mkdir -p /etc/chromium/policies/managed \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
-    
-# Install Widevine component for Chromium
-RUN WIDEVINE_VERSION=$(wget --quiet -O - https://dl.google.com/widevine-cdm/versions.txt | tail -n 1) \
-    && wget "https://dl.google.com/widevine-cdm/$WIDEVINE_VERSION-linux-x64.zip" -O /tmp/widevine.zip \
-    && mkdir -p /usr/lib/chromium/WidevineCdm/_platform_specific/linux_x64 \
-    && unzip -p /tmp/widevine.zip manifest.json > /usr/lib/chromium/WidevineCdm/manifest.json \
-    && unzip -p /tmp/widevine.zip LICENSE.txt > /usr/lib/chromium/WidevineCdm/LICENSE.txt \
-    && unzip -p /tmp/widevine.zip libwidevinecdm.so > /usr/lib/chromium/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so \
-    && rm /tmp/widevine.zip
 
 # Add normal user
 RUN useradd glados --shell /bin/bash --create-home \
@@ -77,11 +68,10 @@ COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 # Openbox Configuration
 COPY ./configs/openbox_config.xml /var/lib/openbox/openbox_config.xml
 
-# Link Widevine for First Boot start
-RUN mkdir -p /home/glados/.config/chromium/WidevineCdm && echo '{"Path":"/usr/lib/chromium/WidevineCdm"}' > /home/glados/.config/chromium/WidevineCdm/latest-component-updated-widevine-cdm \
-    && chown -R glados /home/glados
-
 # Install deps, build then cleanup
 RUN yarn && yarn build && yarn cache clean && rm -rf src
+
+# Run first Widevine component install for Chromium
+RUN sudo -u glados bash ./widevine.sh
 
 ENTRYPOINT [ "bash", "./start.sh" ]

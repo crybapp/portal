@@ -1,13 +1,13 @@
 {
+  "bookmark_bar": {
+    "show_on_all_tabs": false
+  },
   "browser": {
     "custom_chrome_frame": false,
     "show_home_button": true,
     "window_placement": {
       "maximized": true
     }
-  },
-  "bookmark_bar": {
-    "show_on_all_tabs": false
   },
   "signin": {
     "allowed": false

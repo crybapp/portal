@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Update Widevine, but only if glados user exists
+if id -u glados > /dev/null 2>&1; then
+    sudo -u glados bash ./widevine.sh
+fi
+
 # Start dbus only if it's not already running.
 if ! pgrep dbus-daemon > /dev/null; then
     echo "Setting up dbus..."
