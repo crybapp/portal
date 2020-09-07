@@ -1,34 +1,39 @@
 ![Cryb OSS](.github/portal-icon.png "@cryb/portal Logo")
 
-_**Portal** - VM instance_
+**@cryb/portal** - _VM instance_
 
-[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal)](https://github.com/crybapp/portal/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/portal)](https://github.com/crybapp/portal/blob/master/LICENSE) [![Patreon Donate](https://img.shields.io/badge/donate-Patreon-red.svg)](https://patreon.com/cryb)
+[![GitHub contributors](https://img.shields.io/github/contributors/crybapp/portal)](https://github.com/crybapp/portal/graphs/contributors) [![License](https://img.shields.io/github/license/crybapp/portal)](https://github.com/crybapp/portal/blob/master/LICENSE) [![Patreon Donate](https://img.shields.io/badge/donate-Patreon-red.svg)](https://patreon.com/cryb) [![Chat on Discord](https://discord.com/api/guilds/594942455749672983/widget.png)](https://discord.gg/xdhEgD5)
 
 ## Docs
+
 * [Info](#info)
-    * [Status](#status)
+  * [Status](#status)
 * [Codebase](#codebase)
-    * [Folder Structure](#folder-structure)
-		* [Code Style](#code-style)
-    * [First time setup](#first-time-setup)
-        * [Installation](#installation)
-    * [Running the app locally](#running-the-app-locally)
-        * [Background services](#background-services)
-        * [Starting @cryb/portal](#starting-@cryb/portal)
+  * [Folder Structure](#folder-structure)
+  * [Code Style](#code-style)
+  * [First time setup](#first-time-setup)
+    * [Installation](#installation)
+  * [Running the app locally](#running-the-app-locally)
+    * [Background services](#background-services)
+    * [Starting @cryb/portal](#starting-@cryb/portal)
 * [Questions / Issues](#questions--issues)
 
 ## Info
+
 `@cryb/portal` is the instance deployed onto VM machines to act as the 'Virtual browser'.
 
 `@cryb/portal` connect to `@cryb/portals` over WS to send and recieve updates like controller events and health updates.
 
 ### Status
+
 `@cryb/portal` has been actively developed internally since September 2019, and is now open source as of October 2019.
 
 ## Codebase
+
 The codebase for `@cryb/portal` is written in JavaScript, utilising TypeScript and Node.js.
 
 ### Code Style
+
 We ask that you follow our [code style guidelines](https://github.com/crybapp/library/blob/master/code-style/STYLE.md) when contributing to this repository.
 
 We use TSLint in order to lint our code. Run `yarn lint` before committing any code to ensure it's clean.
@@ -36,6 +41,7 @@ We use TSLint in order to lint our code. Run `yarn lint` before committing any c
 *Note: while we have most rules covered in our `tslint.json` config, it's good practice to familarise yourself with our code style guidelines*
 
 ### Folder Structure
+
 ```
 cryb/portal/
 └──┐ src # The core source code
@@ -46,6 +52,7 @@ cryb/portal/
 ```
 
 ### First time setup
+
 First, clone the `@cryb/portal` repository locally:
 
 ```
@@ -53,15 +60,17 @@ git clone https://github.com/crybapp/portal.git
 ```
 
 #### Installation
+
 The following services need to be installed for `@cryb/portal` to function:
 
 * `@cryb/portals`
-* `@cryb/aperture`
+* `@cryb/aperture` or Janus WebRTC Server
 
 We recommend that you run the following services alongside `@cryb/portal`, but it's not required.
+
 * `@cryb/api`
 * `@cryb/web`
-* `@cryb/aperture`
+* `@cryb/aperture` or Janus WebRTC Server
 
 You also need to install the required dependencies by running `yarn`
 
@@ -72,9 +81,11 @@ In this file, you'll need some values. Documentation is available in the `.env.e
 ### Running the app locally
 
 #### Background Services
-Make sure `@cryb/portals` and `@cryb/aperture` are running on port 1337 and 9000 respectively.
+
+Make sure `@cryb/portals` is running on port 5000 and that you have setup `@cryb/aperture` or Janus WebRTC Server.
 
 #### Starting @cryb/portal
+
 We recommend that you use a service like [Docker](https://docker.com) to start an instance of `@cryb/portal`.
 
 To run `@cryb/portal` in development mode on Docker, run `yarn docker:dev`.
@@ -83,4 +94,4 @@ Use `yarn docker:build` to build an image for deployment in production.
 
 ## Questions / Issues
 
-If you have an issues with `@cryb/portal`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/ShTATH4) and ask in #tech-support.
+If you have an issues with `@cryb/portal`, please either open a GitHub issue, contact a maintainer or join the [Cryb Discord Server](https://discord.gg/xdhEgD5) and ask in `#tech-support`.

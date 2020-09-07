@@ -6,11 +6,11 @@
     ██████████████████████████████████████       This service runs on each VM instance and requires the following:
 ████████████                      ████████████
 ████████████                      ████████████   * @cryb/portals
-        ████                      ████           * @cryb/aperture
-        ████     ████████         ████           
+        ████                      ████           * @cryb/aperture or Janus WebRTC Server
+        ████     ████████         ████
         ████     ████████         ████           Have any issues? Open them at https://github.com/crybapp/portal/issues
         ████     ████████         ████           Working on new features? Merge them in at https://github.com/crybapp/portal/merge_requests
-        ████     ████████         ████           
+        ████     ████████         ████
         ████     ████████         ████
         ██████████████████████████████
         ██████████████████████████████

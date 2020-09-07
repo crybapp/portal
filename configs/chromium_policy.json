@@ -29,6 +29,7 @@
   "PromptForDownloadLocation": false,
   "SyncDisabled": true,
   "URLBlacklist": [
+    "chrome://flags",
     "chrome://policy",
     "file://*"
   ]

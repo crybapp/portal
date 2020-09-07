@@ -1,37 +1,37 @@
 {
-	"name": "@cryb/portal",
-	"version": "1.0.0",
-	"description": "The service deployed on VM instances to launch Chromium & more",
-	"main": "index.js",
-	"repository": "https://github.com/crybapp/portal",
-	"author": "William Gibson <w.gibbo3@icloud.com>",
-	"license": "MIT",
-	"scripts": {
-		"start": "node dist",
-		"build": "tsc",
-		"lint": "tslint src/**/*.ts{,x}",
-		"docker:dev": "yarn docker:build && yarn docker:run",
-		"docker:build": "docker build -t cryb/portal .",
-		"docker:run": "docker run --rm -it --net=bridge --shm-size=\"1gb\" cryb/portal"
-	},
-	"dependencies": {
-		"dotenv": "^8.2.0",
-		"jsonwebtoken": "^8.5.1",
-		"keysym": "^0.0.6",
-		"node-pre-gyp": "^0.13.0",
-		"process-exists": "^4.0.0",
-		"tsc-watch": "^4.0.0",
-		"typescript": "^3.6.4",
-		"ws": "^7.2.0",
-		"yargs": "^14.2.0"
-	},
-	"devDependencies": {
-		"@types/fluent-ffmpeg": "^2.1.11",
-		"@types/jsonwebtoken": "^8.3.5",
-		"@types/keysym": "^0.0.1",
-		"@types/node": "^12.11.1",
-		"@types/ws": "^6.0.3",
-		"@types/yargs": "^13.0.3",
-		"tslint": "^5.20.1"
-	}
+  "name": "@cryb/portal",
+  "version": "1.0.0",
+  "description": "The service deployed on VM instances to launch Chromium & more",
+  "main": "dist/index.js",
+  "repository": "https://github.com/crybapp/portal.git",
+  "author": "JeDaYoshi <hi@jeda.im>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node dist",
+    "build": "tsc",
+    "lint": "tslint src/**/*.ts{,x}",
+    "docker:dev": "yarn docker:build && yarn docker:run",
+    "docker:build": "docker build -t cryb/portal .",
+    "docker:run": "docker run --rm -it --net=bridge --shm-size=\"1gb\" cryb/portal"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "keysym": "^0.0.6",
+    "node-pre-gyp": "^0.13.0",
+    "process-exists": "^4.0.0",
+    "tsc-watch": "^4.0.0",
+    "typescript": "^3.6.4",
+    "ws": "^7.2.0",
+    "yargs": "^14.2.0"
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.11",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/keysym": "^0.0.1",
+    "@types/node": "^12.11.1",
+    "@types/ws": "^6.0.3",
+    "@types/yargs": "^13.0.3",
+    "tslint": "^5.20.1"
+  }
 }
