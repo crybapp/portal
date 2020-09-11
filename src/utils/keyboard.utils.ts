@@ -35,6 +35,12 @@ export const convertKey = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) 
         case 'ArrowRight':
             char = 'Right'
             break
+        case 'PageUp':
+            char = 'Page_Up'
+            break
+        case 'PageDown':
+            char = 'Page_Down'
+            break
         case 'Shift':
             char = 'Shift_L'
             break
@@ -44,9 +50,6 @@ export const convertKey = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) 
         case 'Alt':
             char = 'Alt_L'
             break
-        case 'Tab':
-            char = 'Tab'
-            break
         case 'Control':
             char = 'Control_L'
             break
@@ -54,11 +57,11 @@ export const convertKey = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) 
             char = 'dead_grave'
             break
         default:
-            char = uCode
+            char = (code.length === 1 ? uCode : code)
             break
     }
 
-    if (ctrl && char != 'Control_L')
+    if (ctrl && char !== 'Control_L')
         return `ctrl+${char}`
 
     return char
