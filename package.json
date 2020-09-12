@@ -21,7 +21,7 @@
     "node-pre-gyp": "^0.13.0",
     "process-exists": "^4.0.0",
     "tsc-watch": "^4.0.0",
-    "typescript": "^3.6.4",
+    "typescript": "^4.0.2",
     "ws": "^7.2.0",
     "yargs": "^14.2.0"
   },
