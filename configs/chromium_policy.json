@@ -9,7 +9,7 @@
   "BrowserAddPersonEnabled": false,
   "BrowserGuestModeEnabled": false,
   "BrowserSignin": 0,
-  "DownloadRestrictions": 3,
+  "DownloadRestrictions": 2,
   "EditBookmarksEnabled": false,
   "EnableSyncConsent": false,
   "ExtensionInstallBlacklist": [
