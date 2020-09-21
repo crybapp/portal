@@ -58,7 +58,7 @@
   "PasswordManagerEnabled": false,
   "PrintingEnabled": false,
   "PromptForDownloadLocation": false,
-  "SyncDisabled": true,
+  "SyncDisabled": false,
   "URLBlacklist": [
     "chrome://flags",
     "chrome://policy",
