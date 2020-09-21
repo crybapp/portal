@@ -9,9 +9,6 @@
       "maximized": true
     }
   },
-  "signin": {
-    "allowed": false
-  },
   "sync_promo": {
     "show_on_first_run_allowed": false
   }

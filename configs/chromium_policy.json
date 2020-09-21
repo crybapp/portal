@@ -8,7 +8,7 @@
   "BookmarkBarEnabled": false,
   "BrowserAddPersonEnabled": false,
   "BrowserGuestModeEnabled": false,
-  "BrowserSignin": 0,
+  "BrowserSignin": 1,
   "DownloadRestrictions": 2,
   "EditBookmarksEnabled": false,
   "EnableSyncConsent": false,
@@ -58,7 +58,7 @@
   "PasswordManagerEnabled": false,
   "PrintingEnabled": false,
   "PromptForDownloadLocation": false,
-  "SyncDisabled": true,
+  "SyncDisabled": false,
   "URLBlacklist": [
     "chrome://flags",
     "chrome://policy",
