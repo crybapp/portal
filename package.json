@@ -7,13 +7,18 @@
   "author": "JeDaYoshi <hi@jeda.im>",
   "license": "MIT",
   "scripts": {
-    "start": "node dist",
     "build": "tsc",
-    "lint": "tslint src/**/*.ts{,x}",
+    "start": "node dist",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
     "docker:dev": "yarn docker:build && yarn docker:run",
     "docker:build": "docker build -t cryb/portal .",
     "docker:run": "docker run --rm -it --net=bridge --shm-size=\"1gb\" cryb/portal"
   },
+  "files": [
+    "dist/**/*",
+    "logo.txt"
+  ],
   "dependencies": {
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
@@ -32,6 +37,8 @@
     "@types/node": "^12.11.1",
     "@types/ws": "^6.0.3",
     "@types/yargs": "^13.0.3",
-    "tslint": "^5.20.1"
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "eslint": "^7.9.0"
   }
 }
