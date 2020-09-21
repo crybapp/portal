@@ -127,13 +127,13 @@ export default class VirtualBrowser {
 
   private fetchCommand = (data: Controller, type: string) : string | null => {
     const typeHeader = type.split('_')[0]
-    const pressType = type.split('_')[1].toLowerCase()
+    const pressType = type.split('_')[1]
 
     switch (typeHeader) {
     case 'KEY': {
       const { key, ctrlKey: ctrl, shiftKey: shift } = data
 
-      return `key${pressType} --clearmodifiers '${convertKey(key, { ctrl, shift })}`
+      return `key${pressType.toLowerCase()} --clearmodifiers '${convertKey(key, { ctrl, shift })}`
     }
     case 'MOUSE': {
       const { x, y, button, scrollUp } = data
