@@ -77,7 +77,6 @@ export default class VirtualBrowser {
         setTimeout(this.setupVideo, 1000)
       })
     }
-
   }
 
   setupAudio = () : void => {

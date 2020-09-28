@@ -69,7 +69,7 @@ COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
 COPY ./configs/openbox_config.xml /var/lib/openbox/openbox_config.xml
 
 # Install deps, build then cleanup
-RUN yarn && yarn build && yarn cache clean && rm -rf src
+RUN yarn install --frozen-lockfile && yarn build && yarn cache clean && rm -rf src
 
 # Run first Widevine component install for Chromium
 RUN sudo -u glados bash ./widevine.sh
