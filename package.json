@@ -23,15 +23,12 @@
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
     "keysym": "^0.0.6",
-    "node-pre-gyp": "^0.13.0",
     "process-exists": "^4.0.0",
-    "tsc-watch": "^4.0.0",
     "typescript": "^3.6.4",
     "ws": "^7.2.0",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "@types/fluent-ffmpeg": "^2.1.11",
     "@types/jsonwebtoken": "^8.3.5",
     "@types/keysym": "^0.0.1",
     "@types/node": "^12.11.1",

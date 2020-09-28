@@ -94,6 +94,5 @@ dist
 .DS_Store
 
 # Package Manager Files
-yarn.lock
 package-lock.json
 .pnp.js
