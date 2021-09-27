@@ -1,10 +1,10 @@
 import processExists from 'process-exists'
-import { Controller } from '../models/controller'
 import { convertKey } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio } from './utils'
 import { signToken } from '../utils/generate.utils'
 import { fetchPortalId } from '../utils/helpers.utils'
-import { Writable } from 'stream'
+import type { Controller } from '../models/controller'
+import type { Writable } from 'stream'
 
 export default class VirtualBrowser {
   width: number
@@ -108,7 +108,7 @@ export default class VirtualBrowser {
     .on('close', () => setTimeout(this.browserCheck, 2000)) }
 
   private browserCheck = async () : Promise<void> => {
-    if (await processExists('chromium-browser'))
+    if (await processExists('chrome'))
       return console.log('Browser running. Not restarting.')
 
     this.setupChromium()
