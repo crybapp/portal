@@ -20,7 +20,8 @@ RUN apk --no-cache add bash chromium dbus dbus-x11 ffmpeg ffmpeg-libs font-noto 
     && addgroup glados audio \
     && mkdir -p /var/run/dbus \
     && mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended \
-    && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
+    && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix \
+    && npm rm -g npm; rm -rf /root/.npm
 
 # Pulseaudio Configuration
 COPY ./configs/pulse_config.pa /etc/pulse/default.pa
@@ -34,8 +35,7 @@ COPY --from=builder /build/package.tgz /home/glados/.internal/
 
 RUN tar -xzf /home/glados/.internal/package.tgz \
     && rsync -vua --delete-after /home/glados/.internal/package/ /home/glados/.internal/ \
-    && apk --no-cache del rsync \
-    && npm rm -g npm; rm -rf /root/.npm
+    && apk --no-cache del rsync
 COPY --from=builder /tmp/app_node_modules/ /home/glados/.internal/node_modules/
 COPY ./start.sh ./widevine.sh ./.env* /home/glados/.internal/
 
