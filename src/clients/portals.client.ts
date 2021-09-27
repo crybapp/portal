@@ -60,7 +60,7 @@ export default class WRTCClient {
       this.browser.handleControllerEvent(d, t)
     else if (op === 10) {
       if (!d.audioport || !d.videoport || !d.janusAddress)
-        return
+        return console.error('I do not know where to connect! Not setting up browser...')
 
       this.browser.audioPort = d.audioport as number
       this.browser.videoPort = d.videoport as number

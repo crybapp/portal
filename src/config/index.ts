@@ -5,7 +5,7 @@ import { verifyEnv } from '../utils/verifications.utils'
 if (process.env.NODE_ENV === 'production') {
   // Security measure: Delete .env file, ignore silently
   // eslint-disable-next-line
-  fs.unlink('.env', err => {})
+  fs.unlink('.env', () => {})
 }
 
 verifyEnv('PORTALS_WS_URL', 'PORTALS_KEY', 'STREAMING_URL')

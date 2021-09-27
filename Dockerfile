@@ -1,77 +1,47 @@
-FROM node:lts-buster
+# Builder image, we get the dependencies and stuff here
+FROM node:14.17-alpine3.13 AS builder
+WORKDIR /build
+COPY package.json /build/
+COPY yarn.lock /build/
+RUN yarn config set enableTelemetry false \
+    && yarn install --frozen-lockfile --prod && cp -r node_modules /tmp/app_node_modules \
+    && yarn install --frozen-lockfile
+COPY . /build/
+RUN yarn build && yarn pack --filename package.tgz
 
-# Install Chromium, audio and other misc packages, cleanup, create Chromium policies folders, workarounds
-RUN apt-get update && apt-get -y dist-upgrade && \
-    apt-get --no-install-recommends -y install \
-        dbus \
-        dbus-x11 \
-        xvfb \
-        xdotool \
-        openbox \
-        fonts-opensymbol \
-        fonts-symbola \
-        fonts-liberation \
-        fonts-freefont-ttf \
-        fonts-droid-fallback \
-        fonts-dejavu-core \
-        fonts-arphic-ukai \
-        fonts-arphic-uming \
-        fonts-ipafont-mincho \
-        fonts-ipafont-gothic \
-        fonts-unfonts-core \
-        fonts-noto-color-emoji \
-        fonts-noto \
-        fonts-nanum \
-        pulseaudio \
-        x11-session-utils \
-        libgstreamer1.0-0 \
-        gstreamer1.0-plugins-base \
-        gstreamer1.0-plugins-good \
-        gstreamer1.0-plugins-bad \
-        gstreamer1.0-plugins-ugly \ 
-        gstreamer1.0-libav \
-        gstreamer1.0-doc \
-        gstreamer1.0-tools \
-        gstreamer1.0-x \
-        gstreamer1.0-alsa \
-        gstreamer1.0-gl \
-        gstreamer1.0-gtk3 \
-        gstreamer1.0-qt5 \
-        gstreamer1.0-pulseaudio \
-        ffmpeg \
-        chromium \
-        sudo \
-        grep \
-        procps \
-        xdg-utils \
-        libnss3 \
-        libnspr4 \
-        libappindicator3-1 \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
+# Final distributed app image
+FROM node:14.17-alpine3.13
+WORKDIR /home/glados/.internal
+
+RUN apk --no-cache add bash chromium dbus dbus-x11 ffmpeg ffmpeg-libs font-noto font-noto-emoji \
+    gst-plugins-bad gst-plugins-base gst-plugins-good gst-plugins-ugly gstreamer gstreamer-tools \
+    openbox procps pulseaudio rsync sudo tar ttf-dejavu ttf-droid-nonlatin ttf-freefont ttf-liberation xdg-utils xdotool xvfb \
+    && addgroup -g 719 glados \
+    && adduser -u 719 -G glados -s /bin/sh -D glados \
+    && addgroup glados audio \
     && mkdir -p /var/run/dbus \
-    && mkdir -p /etc/chromium/policies/managed \
+    && mkdir -p /etc/chromium/policies/managed /etc/chromium/policies/recommended \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix
 
-# Add normal user
-RUN useradd glados --shell /bin/bash --create-home \
-    && usermod -a -G audio glados
-
-# Copy information
-WORKDIR /home/glados/.internal
-COPY . .
-
+# Pulseaudio Configuration
+COPY ./configs/pulse_config.pa /etc/pulse/default.pa
+# Openbox Configuration
+COPY ./configs/openbox_config.xml /var/lib/openbox/openbox_config.xml
 # Chromium Policies & Preferences
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
 COPY ./configs/master_preferences.json /etc/chromium/master_preferences
-# Pulseaudio Configuration
-COPY ./configs/pulse_config.pa /tmp/pulse_config.pa
-# Openbox Configuration
-COPY ./configs/openbox_config.xml /var/lib/openbox/openbox_config.xml
 
-# Install deps, build then cleanup
-RUN yarn install --frozen-lockfile && yarn build && yarn cache clean && rm -rf src
+COPY --from=builder /build/package.tgz /home/glados/.internal/
 
-# Run first Widevine component install for Chromium
-RUN sudo -u glados bash ./widevine.sh
+RUN tar -xzf /home/glados/.internal/package.tgz \
+    && rsync -vua --delete-after /home/glados/.internal/package/ /home/glados/.internal/ \
+    && apk --no-cache del rsync \
+    && npm rm -g npm; rm -rf /root/.npm
+COPY --from=builder /tmp/app_node_modules/ /home/glados/.internal/node_modules/
+COPY ./start.sh /home/glados/.internal/start.sh
+COPY ./widevine.sh /home/glados/.internal/widevine.sh
+COPY ./.env /home/glados/.internal/.env
 
-ENTRYPOINT [ "bash", "./start.sh" ]
+RUN sudo -u glados /home/glados/.internal/widevine.sh
+
+ENTRYPOINT [ "/home/glados/.internal/start.sh" ]

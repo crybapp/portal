@@ -1,2 +1,4 @@
-**/node_modules
-**/dist
+.env.example
+dist/
+node_modules/
+Dockerfile

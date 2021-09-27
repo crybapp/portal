@@ -9,7 +9,7 @@ interface ConvertKeyCodeConfig {
   shift: boolean
 }
 
-export const convertKey = (code: string, { ctrl, shift }: ConvertKeyCodeConfig) : string => {
+export const convertKey = (code: string, { ctrl }: ConvertKeyCodeConfig) : string => {
   let char
   const uCode = 'U00' + code.codePointAt(0).toString(16)
 

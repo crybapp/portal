@@ -15,7 +15,7 @@ export const xvfb = (env: NodeJS.ProcessEnv, width: number,
 
 export const pulseaudio = (env: NodeJS.ProcessEnv) : ChildProcess => spawn('pulseaudio', [
   '--exit-idle-time=-1',
-  '--file=/tmp/pulse_config.pa',
+  '--file=/etc/pulse/default.pa',
   '-n',
   '--daemonize=false',
   '--disallow-module-loading'
@@ -56,7 +56,7 @@ export const chromium = (env: NodeJS.ProcessEnv, startupUrl: string) : ChildProc
   if (process.env.IS_CHROMIUM_DARK_MODE === 'false')
     config.splice(config.indexOf('-force-dark-mode'), 1)
 
-  return spawn('chromium', [
+  return spawn('chromium-browser', [
     ...config,
     startupUrl
   ], {
