@@ -1,8 +1,7 @@
 # Builder image, we get the dependencies and stuff here
 FROM node:14.17-alpine3.13 AS builder
 WORKDIR /build
-COPY package.json /build/
-COPY yarn.lock /build/
+COPY package.json yarn.lock /build/
 RUN yarn config set enableTelemetry false \
     && yarn install --frozen-lockfile --prod && cp -r node_modules /tmp/app_node_modules \
     && yarn install --frozen-lockfile
