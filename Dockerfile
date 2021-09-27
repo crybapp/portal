@@ -38,9 +38,7 @@ RUN tar -xzf /home/glados/.internal/package.tgz \
     && apk --no-cache del rsync \
     && npm rm -g npm; rm -rf /root/.npm
 COPY --from=builder /tmp/app_node_modules/ /home/glados/.internal/node_modules/
-COPY ./start.sh /home/glados/.internal/start.sh
-COPY ./widevine.sh /home/glados/.internal/widevine.sh
-COPY ./.env /home/glados/.internal/.env
+COPY ./start.sh ./widevine.sh ./.env* /home/glados/.internal/
 
 RUN sudo -u glados /home/glados/.internal/widevine.sh
 
