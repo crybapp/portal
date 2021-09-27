@@ -14,13 +14,13 @@ fi
 # Check if user exists
 if id -u glados > /dev/null 2>&1; then
     echo "Starting portal in glados user..."
-    sudo -u glados yarn start $@
+    sudo -u glados node ./dist/index.js $@
 else
     echo "glados user seems to not exist. starting in current user..."
     if [ $(id -u) = 0 ]; then
         echo "--- We'll accept running as root - but it's not recommended nor supported. ---"
     fi
-    yarn start $@
+    node ./dist/index.js $@
 fi
 
 echo "All done, shutting down!"
