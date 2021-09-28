@@ -3,7 +3,6 @@ FROM node:14.17-alpine3.13 AS builder
 WORKDIR /build
 COPY package.json yarn.lock /build/
 RUN yarn config set enableTelemetry false \
-    && yarn install --frozen-lockfile --prod && cp -r node_modules /tmp/app_node_modules \
     && yarn install --frozen-lockfile
 COPY . /build/
 RUN yarn build && yarn pack --filename package.tgz
@@ -36,7 +35,6 @@ COPY --from=builder /build/package.tgz /home/glados/.internal/
 RUN tar -xzf /home/glados/.internal/package.tgz \
     && rsync -vua --delete-after /home/glados/.internal/package/ /home/glados/.internal/ \
     && apk --no-cache del rsync
-COPY --from=builder /tmp/app_node_modules/ /home/glados/.internal/node_modules/
 COPY ./start.sh ./widevine.sh ./.env* /home/glados/.internal/
 
 RUN sudo -u glados /home/glados/.internal/widevine.sh

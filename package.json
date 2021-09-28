@@ -7,7 +7,7 @@
   "author": "JeDaYoshi <hi@jeda.im>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "ncc build src/index.ts -o dist -m",
     "start": "node dist",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
@@ -19,14 +19,7 @@
     "dist/**/*",
     "logo.txt"
   ],
-  "dependencies": {
-    "dotenv": "^10.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "keysym": "^0.0.6",
-    "process-exists": "^4.1.0",
-    "ws": "^8.2.2",
-    "yargs": "^17.2.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.5",
     "@types/keysym": "^0.0.1",
@@ -35,7 +28,14 @@
     "@types/yargs": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
+    "@vercel/ncc": "^0.31.1",
+    "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
-    "typescript": "^4.4.3"
+    "jsonwebtoken": "^8.5.1",
+    "keysym": "^0.0.6",
+    "process-exists": "^4.1.0",
+    "typescript": "^4.4.3",
+    "ws": "^8.2.2",
+    "yargs": "^17.2.1"
   }
 }
