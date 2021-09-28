@@ -12,8 +12,8 @@ FROM node:14.17-alpine3.13
 WORKDIR /home/glados/.internal
 
 RUN apk --no-cache add bash chromium dbus dbus-x11 ffmpeg ffmpeg-libs font-noto font-noto-emoji \
-    gst-plugins-bad gst-plugins-base gst-plugins-good gst-plugins-ugly gstreamer gstreamer-tools \
-    openbox procps pulseaudio rsync sudo tar ttf-dejavu ttf-droid-nonlatin ttf-freefont ttf-liberation xdg-utils xdotool xvfb \
+    gst-plugins-base gst-plugins-good gstreamer gstreamer-tools openbox procps pulseaudio rsync \
+    sudo tar ttf-dejavu ttf-droid-nonlatin ttf-freefont ttf-liberation xdg-utils xdotool xvfb \
     && addgroup -g 719 glados \
     && adduser -u 719 -G glados -s /bin/sh -D glados \
     && addgroup glados audio \
