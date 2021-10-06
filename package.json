@@ -7,7 +7,7 @@
   "author": "JeDaYoshi <hi@jeda.im>",
   "license": "MIT",
   "scripts": {
-    "build": "ncc build src/index.ts -o dist -m",
+    "build": "ncc build src/index.ts -mso dist",
     "start": "node dist",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",

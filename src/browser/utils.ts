@@ -99,7 +99,7 @@ export const janusAudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string
   streamingIp: string) : ChildProcess => spawn('gst-launch-1.0', [
   '-v', 'pulsesrc',
   '!', 'audioresample',
-  '!', 'audio/x-raw,channels=2,rate=24000',
+  '!', 'audio/x-raw,channels=2,rate=48000',
   '!', 'opusenc',
   `bitrate=${bitrate}`,
   '!', 'rtpopuspay',
