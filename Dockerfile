@@ -1,5 +1,5 @@
 # Builder image, we get the dependencies and stuff here
-FROM node:14.17-alpine3.13 AS builder
+FROM node:14-alpine3.15 AS builder
 WORKDIR /build
 COPY package.json yarn.lock /build/
 RUN yarn config set enableTelemetry false \
@@ -8,7 +8,7 @@ COPY . /build/
 RUN yarn build && yarn pack --filename package.tgz
 
 # Final distributed app image
-FROM node:14.17-alpine3.13
+FROM node:14-alpine3.15
 WORKDIR /home/glados/.internal
 
 RUN apk --no-cache add bash chromium dbus dbus-x11 ffmpeg ffmpeg-libs font-noto font-noto-emoji \
