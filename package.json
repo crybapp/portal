@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "dotenv": "^10.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "keysym": "^0.0.6",
     "process-exists": "^4.1.0",
     "ws": "^8.2.2",
