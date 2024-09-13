@@ -1,9 +1,7 @@
 import { processExists } from 'process-exists'
 import { Controller } from '../models/controller'
 import { convertKey } from '../utils/keyboard.utils'
-import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio } from './utils'
-import { signToken } from '../utils/generate.utils'
-import { fetchPortalId } from '../utils/helpers.utils'
+import { xvfb, pulseaudio, openbox, chromium, xdotool, janusStream } from './utils'
 import { Writable } from 'stream'
 
 export default class VirtualBrowser {
@@ -12,8 +10,10 @@ export default class VirtualBrowser {
   videoBitrate: string
   videoFps: string
   videoPort: number
+  videoRtcpPort: number
   audioBitrate: string
   audioPort: number
+  audioRtcpPort: number
   startupUrl: string
   streamingIp: string
   bitDepth: number
@@ -28,16 +28,14 @@ export default class VirtualBrowser {
     this.audioBitrate = audioBitrate
     this.startupUrl = startupUrl
     this.bitDepth = bitDepth
-    this.env = { ...process.env, DISPLAY: ':100' }
+    this.env = { DISPLAY: `:${Date.now().toString().slice(-3)}`, ...process.env }
   }
 
   init = () : void => {
     console.log('Setting up xvfb...')
     xvfb(this.env, this.width, this.height, this.bitDepth)
-    if (process.env.AUDIO_ENABLED !== 'false') {
-      console.log('Setting up pulseaudio...')
-      pulseaudio(this.env)
-    }
+    console.log('Setting up pulseaudio...')
+    pulseaudio(this.env)
 
     console.log('Setting up openbox...')
     openbox(this.env)
@@ -49,37 +47,32 @@ export default class VirtualBrowser {
     this.setupChromium()
   }
 
-  setupVideo = () : void => {
-    janusVideo(
+  setupStream = () : void => {
+    janusStream(
       this.env,
       this.videoPort,
-      this.width,
-      this.height,
+      this.videoRtcpPort,
+      this.audioPort,
+      this.audioRtcpPort,
       this.videoFps,
       this.videoBitrate,
-      this.streamingIp
-    ).on('close', () => {
-      console.log('gstreamer has suddenly stopped - attempting a restart')
-      setTimeout(this.setupVideo, 1000)
-    })
-  }
-
-  setupAudio = () : void => {
-    janusAudio(
-      this.env,
-      this.audioPort,
       this.audioBitrate,
-      this.streamingIp,
-    ).on('close', () => {
-      console.log('gstreamer audio has suddenly stopped - attempting a restart')
-      setTimeout(this.setupAudio, 1000)
-    })
+      this.streamingIp
+    ).on('close', () => setTimeout(this.streamCheck, 500))
   }
 
   // ToDo: Add a communication to the portals WS that the portal is stopping (closed the browser),
   // then stop it after Chromium is closed for a normal shutdown.
   private setupChromium = () : void => { chromium(this.env, this.startupUrl)
     .on('close', () => setTimeout(this.browserCheck, 2000)) }
+
+  private streamCheck = async () : Promise<void> => {
+    if (await processExists('gst-launch-1.0'))
+      return console.log('gstreamer running. Not restarting.')
+
+    console.log('gstreamer has suddenly stopped - attempting a restart')
+    this.setupStream()
+  }
 
   private browserCheck = async () : Promise<void> => {
     if (await processExists('chromium-browser'))

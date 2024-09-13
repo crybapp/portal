@@ -42,7 +42,7 @@ export default class WRTCClient {
       this.websocket = null
 
       console.log('Attempting reconnect to @cryb/portals via WS')
-      setTimeout(this.setupWebSocket, 2500)
+      setTimeout(this.setupWebSocket, 1000)
     })
   }
 
@@ -63,17 +63,17 @@ export default class WRTCClient {
         return
 
       this.browser.audioPort = d.audioport as number
+      this.browser.audioRtcpPort = d.audiortcpport as number
       this.browser.videoPort = d.videoport as number
-      this.browser.streamingIp = d.janusAddress as string ?? process.env.STREAMING_URL
+      this.browser.videoRtcpPort = d.videortcpport as number
+      this.browser.streamingIp = process.env.STREAMING_URL || d.janusAddress as string
 
       this.setupBrowser()
     }
   }
 
   setupBrowser = () : void => {
-    this.browser.setupVideo()
-    if (process.env.AUDIO_ENABLED !== 'false')
-      this.browser.setupAudio()
+    this.browser.setupStream()
   }
 
   public send = (object: IWSEvent) : void => this.websocket.send(JSON.stringify(object))

@@ -69,43 +69,46 @@ export const chromium = (env: NodeJS.ProcessEnv, startupUrl: string) : ChildProc
   })
 }
 
-export const janusVideo = (env: NodeJS.ProcessEnv, port: number, width: number,
-  height: number, fps: string, bitrate: string, streamingIp: string) : ChildProcess => spawn('gst-launch-1.0', [
+export const janusStream = (env: NodeJS.ProcessEnv, videoPort: number, videoRtcpPort: number, audioPort: number, audioRtcpPort: number,
+  fps: string, videoBitrate: string, audioBitrate: string, streamingIp: string) :
+  ChildProcess => spawn('gst-launch-1.0', [
   '-v',
-  'ximagesrc', 'use-damage=0',
-  '!', 'videoconvert',
-  '!', `video/x-raw,width=${width},height=${height},framerate=${fps}/1`,
+  'rtpbin', 'name=rtpbin', 'rtp-profile=avpf',
+  // use-damage=true uses too much CPU, use-damage=false stutters (when not 30/60 FPS)
+  // https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/issues/809
+  // hi Amby, and thanks for your work at Hyperbeam :)
+  'ximagesrc', 'show-pointer=true', 'use-damage=true',
+  '!', `video/x-raw,framerate=${fps}/1`, '!', 'videoconvertscale',
+  '!', 'queue',
   '!', 'vp8enc',
-  'cpu-used=8',
-  'error-resilient=1',
-  `target-bitrate=${bitrate}`,
-  'deadline=50000',
-  'threads=2',
-  'token-partitions=2',
-  '!', 'rtpvp8pay',
-  '!', 'udpsink',
-  `host=${streamingIp}`,
-  `port=${port}`
-], {
-  env,
-  stdio: [
-    'ignore',
-    'inherit',
-    'inherit'
-  ]
-})
-
-export const janusAudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string,
-  streamingIp: string) : ChildProcess => spawn('gst-launch-1.0', [
-  '-v', 'pulsesrc',
+  'deadline=1',
+  'cpu-used=5', // 3 ends up too pixelated. 5 is a good point for real-time
+  'end-usage=cbr',
+  'error-resilient=partitions',
+  `target-bitrate=${videoBitrate}`,
+  'threads=2', // todo tune later
+  'token-partitions=4',
+  `keyframe-max-dist=${Number(fps)*2}`, // adjust once we add keyframe requests
+  'min-quantizer=0',
+  'max-quantizer=56',
+  'undershoot=95',
+  '!', 'rtpvp8pay', 'pt=100', 'mtu=1204',
+  '!', 'rtpbin.send_rtp_sink_0',
+  'rtpbin.send_rtp_src_0', '!', 'udpsink', `host=${streamingIp}`, `port=${videoPort}`,
+  'rtpbin.send_rtcp_src_0', '!', 'udpsink', `host=${streamingIp}`, `port=${videoRtcpPort}`, 'sync=false', 'async=false',
+  'pulsesrc',
   '!', 'audioresample',
-  '!', 'audio/x-raw,channels=2,rate=24000',
+  '!', 'audio/x-raw,channels=2,rate=48000',
+  '!', 'queue',
   '!', 'opusenc',
-  `bitrate=${bitrate}`,
-  '!', 'rtpopuspay',
-  '!', 'udpsink',
-  `host=${streamingIp}`,
-  `port=${port}`
+  'audio-type=restricted-lowdelay',
+  `bitrate=${audioBitrate}`,
+  'bitrate-type=vbr',
+  'frame-size=10',
+  '!', 'rtpopuspay', 'pt=101', 'mtu=1204',
+  '!', 'rtpbin.send_rtp_sink_1',
+  'rtpbin.send_rtp_src_1', '!', 'udpsink', `host=${streamingIp}`, `port=${audioPort}`,
+  'rtpbin.send_rtcp_src_1', '!', 'udpsink', `host=${streamingIp}`, `port=${audioRtcpPort}`, 'sync=false', 'async=false'
 ], {
   env,
   stdio: [
