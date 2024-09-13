@@ -115,50 +115,6 @@ export const janusAudio = (env: NodeJS.ProcessEnv, port: number, bitrate: string
   ]
 })
 
-export const apertureVideo = (env: NodeJS.ProcessEnv, token: string,
-  width: number, height: number, fps: string, bitrate: string) : ChildProcess => spawn('ffmpeg', [
-  '-f', 'x11grab',
-  '-s', `${width}x${height}`,
-  '-r', fps,
-  '-i', env.DISPLAY,
-  '-an',
-
-  '-f', 'mpegts',
-  '-c:v', 'mpeg1video',
-  '-b:v', bitrate,
-  '-bf', '0',
-
-  `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
-], {
-  env,
-  stdio: [
-    'ignore',
-    'inherit',
-    'inherit'
-  ]
-})
-
-export const apertureAudio = (env: NodeJS.ProcessEnv, token: string, bitrate: string) : ChildProcess => spawn('ffmpeg', [
-  '-f', 'pulse',
-  '-ac', '2',
-  '-ar', '44100',
-  '-i', 'default',
-  '-vn',
-
-  '-f', 'mpegts',
-  '-c:a', 'mp2',
-  '-b:a', bitrate,
-
-  `${env.STREAMING_URL || env.APERTURE_URL}/?t=${token}`
-], {
-  env,
-  stdio: [
-    'ignore',
-    'inherit',
-    'inherit'
-  ]
-})
-
 export const xdotool = (env: NodeJS.ProcessEnv) : ChildProcess => spawn('xdotool', ['-'], {
   env,
   stdio: [

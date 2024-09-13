@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') {
   fs.unlink('.env', err => {})
 }
 
-verifyEnv('PORTALS_WS_URL', 'PORTALS_KEY', 'STREAMING_URL')
+verifyEnv('PORTALS_WS_URL', 'PORTALS_KEY')
 
 export default {
   width: parseInt(process.env.VIDEO_WIDTH) || 720,

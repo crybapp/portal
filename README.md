@@ -36,9 +36,9 @@ The codebase for `@cryb/portal` is written in JavaScript, utilising TypeScript a
 
 We ask that you follow our [code style guidelines](https://github.com/crybapp/library/blob/master/code-style/STYLE.md) when contributing to this repository.
 
-We use TSLint in order to lint our code. Run `yarn lint` before committing any code to ensure it's clean.
+We use ESLint in order to lint our code. Run `pnpm lint` before committing any code to ensure it's clean.
 
-*Note: while we have most rules covered in our `tslint.json` config, it's good practice to familarise yourself with our code style guidelines*
+*Note: while we have most rules covered in our `eslint.config.mjs` config, it's good practice to familarise yourself with our code style guidelines*
 
 ### Folder Structure
 
@@ -64,15 +64,15 @@ git clone https://github.com/crybapp/portal.git
 The following services need to be installed for `@cryb/portal` to function:
 
 * `@cryb/portals`
-* `@cryb/aperture` or Janus WebRTC Server
+* Janus WebRTC Server
 
 We recommend that you run the following services alongside `@cryb/portal`, but it's not required.
 
 * `@cryb/api`
 * `@cryb/web`
-* `@cryb/aperture` or Janus WebRTC Server
+* Janus WebRTC Server
 
-You also need to install the required dependencies by running `yarn`
+You also need to install the required dependencies by running `pnpm i`
 
 Ensure that `.env.example` is either copied and renamed to `.env`, or is simply renamed to `.env`.
 
@@ -82,15 +82,15 @@ In this file, you'll need some values. Documentation is available in the `.env.e
 
 #### Background Services
 
-Make sure `@cryb/portals` is running on port 5000 and that you have setup `@cryb/aperture` or Janus WebRTC Server.
+Make sure `@cryb/portals` is running on port 5000 and that you have setup Janus WebRTC Server.
 
 #### Starting @cryb/portal
 
 We recommend that you use a service like [Docker](https://docker.com) to start an instance of `@cryb/portal`.
 
-To run `@cryb/portal` in development mode on Docker, run `yarn docker:dev`.
+To run `@cryb/portal` in development mode on Docker, run `pnpm run docker:dev`.
 
-Use `yarn docker:build` to build an image for deployment in production.
+Use `pnpm run docker:build` to build an image for deployment in production.
 
 ## Questions / Issues
 

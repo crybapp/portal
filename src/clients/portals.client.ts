@@ -64,15 +64,7 @@ export default class WRTCClient {
 
       this.browser.audioPort = d.audioport as number
       this.browser.videoPort = d.videoport as number
-      this.browser.janusEnabled = true
-      this.browser.streamingIp = process.env.STREAMING_URL
-
-      this.setupBrowser()
-    }
-    else if (op === 20) {
-      this.browser.videoPort = d.aperturePort as number
-      this.browser.audioPort = d.aperturePort as number
-      this.browser.janusEnabled = false
+      this.browser.streamingIp = d.janusAddress as string ?? process.env.STREAMING_URL
 
       this.setupBrowser()
     }
