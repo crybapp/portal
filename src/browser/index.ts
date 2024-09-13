@@ -1,4 +1,4 @@
-import processExists from 'process-exists'
+import { processExists } from 'process-exists'
 import { Controller } from '../models/controller'
 import { convertKey } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, xdotool, janusVideo, janusAudio, apertureVideo, apertureAudio } from './utils'

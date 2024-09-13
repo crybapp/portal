@@ -15,7 +15,7 @@ export const xvfb = (env: NodeJS.ProcessEnv, width: number,
 
 export const pulseaudio = (env: NodeJS.ProcessEnv) : ChildProcess => spawn('pulseaudio', [
   '--exit-idle-time=-1',
-  '--file=/tmp/pulse_config.pa',
+  '--file=/etc/pulse/default.pa',
   '-n',
   '--daemonize=false',
   '--disallow-module-loading'
