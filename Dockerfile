@@ -54,8 +54,7 @@ RUN apt-get update && apt-get -y dist-upgrade && \
     && mkdir -p /etc/chromium/policies/managed \
     && mkdir /tmp/.X11-unix && chmod 1777 /tmp/.X11-unix && chown root /tmp/.X11-unix \
     && useradd glados --shell /bin/bash --create-home \
-    && usermod -a -G audio glados \
-    && mkdir -p /home/glados/.local/share/jellyfinmediaplayer
+    && usermod -a -G audio glados
 
 # Chromium Policies & Preferences
 COPY ./configs/chromium_policy.json /etc/chromium/policies/managed/policies.json
