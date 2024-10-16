@@ -77,8 +77,8 @@ export const janusStream = (env: NodeJS.ProcessEnv, videoPort: number, videoRtcp
   // use-damage=true uses too much CPU, use-damage=false stutters (when not 30/60 FPS)
   // https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/issues/809
   // hi Amby, and thanks for your work at Hyperbeam :)
-  'ximagesrc', 'show-pointer=true', 'use-damage=true',
-  '!', `video/x-raw,framerate=${fps}/1`, '!', 'videoconvertscale',
+  'ximagesrc', 'show-pointer=true', `use-damage=${Number(fps) % 5 === 0 ? 'false' : 'true'}`,
+  '!', 'videoconvert', '!', 'videorate', '!', `video/x-raw,framerate=${fps}/1`,
   '!', 'queue',
   '!', 'vp8enc',
   'deadline=1',
@@ -90,15 +90,14 @@ export const janusStream = (env: NodeJS.ProcessEnv, videoPort: number, videoRtcp
   'token-partitions=4',
   `keyframe-max-dist=${Number(fps)*2}`, // adjust once we add keyframe requests
   'min-quantizer=0',
-  'max-quantizer=56',
-  'undershoot=95',
+  'max-quantizer=50',
+  'static-threshold=0',
   '!', 'rtpvp8pay', 'pt=100', 'mtu=1204',
   '!', 'rtpbin.send_rtp_sink_0',
   'rtpbin.send_rtp_src_0', '!', 'udpsink', `host=${streamingIp}`, `port=${videoPort}`,
   'rtpbin.send_rtcp_src_0', '!', 'udpsink', `host=${streamingIp}`, `port=${videoRtcpPort}`, 'sync=false', 'async=false',
   'pulsesrc',
-  '!', 'audioresample',
-  '!', 'audio/x-raw,channels=2,rate=48000',
+  '!', 'audioconvert', '!', 'audioresample', '!', 'audio/x-raw,channels=2,rate=48000',
   '!', 'queue',
   '!', 'opusenc',
   'audio-type=restricted-lowdelay',
