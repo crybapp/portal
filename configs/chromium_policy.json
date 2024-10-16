@@ -8,7 +8,7 @@
   "BookmarkBarEnabled": false,
   "BrowserAddPersonEnabled": false,
   "BrowserGuestModeEnabled": false,
-  "BrowserSignin": 1,
+  "BrowserSignin": 0,
   "DownloadRestrictions": 2,
   "EditBookmarksEnabled": false,
   "EnableSyncConsent": false,
