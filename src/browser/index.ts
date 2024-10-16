@@ -1,8 +1,8 @@
 import { processExists } from 'process-exists'
-import { Controller } from '../models/controller'
 import { convertKey } from '../utils/keyboard.utils'
 import { xvfb, pulseaudio, openbox, chromium, xdotool, janusStream } from './utils'
-import { Writable } from 'stream'
+import type { Writable } from 'stream'
+import type { Controller } from '../models/controller'
 
 export default class VirtualBrowser {
   width: number
@@ -99,7 +99,7 @@ export default class VirtualBrowser {
     case 'KEY': {
       const { key, ctrlKey: ctrl, shiftKey: shift } = data
 
-      return `key${pressType.toLowerCase()} --clearmodifiers '${convertKey(key, { ctrl, shift })}`
+      return `key${pressType.toLowerCase()} --clearmodifiers --delay 0 '${convertKey(key, { ctrl, shift })}`
     }
     case 'MOUSE': {
       const { x, y, button, scrollUp } = data
@@ -112,7 +112,7 @@ export default class VirtualBrowser {
       case 'DOWN':
         return `mousedown --clearmodifiers ${button}`
       case 'SCROLL':
-        return `key --clearmodifiers ${scrollUp ? 'Down' : 'Up'}`
+        return `click --clearmodifiers ${scrollUp ? '5' : '4'}`
       }
       return null
     }
@@ -120,7 +120,7 @@ export default class VirtualBrowser {
       // I am supposing this is 'PASTE_TEXT'. ToDo change appropriately
       const { text } = data
 
-      return `type --clearmodifiers ${text}`
+      return `type --clearmodifiers --delay 0 ${text}`
     }
     }
   }
